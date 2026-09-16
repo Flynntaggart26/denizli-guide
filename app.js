@@ -76,10 +76,27 @@ function switchTab(id){
 }
 function setLang(v){ lang=v; renderPlaces(); }
 let map;
+let selectedId=null;
 function initMap(){
   map=L.map('map').setView([37.85, 29.25], 9);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom:18, attribution:'© OSM'}).addTo(map);
-  places.forEach(p=> p._marker=L.marker([p.lat,p.lon]).addTo(map).bindPopup(`<b>${p.name}</b><br>${p.desc}`));
+  places.forEach(p=> p._marker=L.marker([p.lat,p.lon]).addTo(map).bindPopup(`<b>${p.name}</b><br>${p.desc}<br><small>💡 ${p.tip}</small>`).on('click',()=> focusPlace(p.id, false)));
+}
+function focusPlace(id, scrollDetail=true){
+  const p=places.find(x=>x.id===id); if(!p) return;
+  selectedId=id;
+  document.querySelectorAll('#places > div').forEach(d=>{
+    const active=d.dataset.pid===id;
+    d.style.borderColor=active?'#0e7490':'#334155';
+    d.style.boxShadow=active?'0 0 0 2px rgba(14,116,144,.45), 0 6px 16px rgba(0,0,0,.28)':'0 6px 16px rgba(0,0,0,.28)';
+  });
+  try{
+    if(map.flyTo) map.flyTo([p.lat,p.lon], 13, {duration:.9});
+    else map.setView([p.lat,p.lon], 13);
+    setTimeout(()=>{ try{ p._marker.openPopup(); }catch(e){} }, 950);
+  }catch(e){ try{ map.setView([p.lat,p.lon], 13); }catch(_){} }
+  showPlaceDetail(id);
+  if(scrollDetail){ try{ document.getElementById('placeDetail').scrollIntoView({behavior:'smooth', block:'nearest'}); }catch(e){} }
 }
 function renderPlaces(){
   const q=document.getElementById('q').value.toLowerCase();
@@ -95,11 +112,14 @@ function renderPlaces(){
   if(!list.length){ el.innerHTML='<div style="padding:14px;color:#94a3b8;font-size:13px">No places found. Try another search.</div>'; return; }
   list.forEach(p=>{
     const div=document.createElement('div');
+    div.dataset.pid=p.id;
     div.style.cssText='background:#1e293b;border:1px solid #334155;border-radius:14px;padding:14px;cursor:pointer;box-shadow:0 6px 16px rgba(0,0,0,.28);transition:.16s';
-    div.innerHTML=`<div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><b style="color:#f8fafc;font-size:15px;letter-spacing:-.01em">${catIcon[p.cat]||'📍'} ${p.name}</b><span style="font-size:10px;padding:4px 8px;border-radius:999px;background:${catColor[p.cat]||'#64748b'};color:white;font-weight:800;white-space:nowrap">${p.cat}</span></div><div style="font-size:13px;color:#e2e8f0;margin-top:6px;font-weight:600;line-height:1.5">${p.desc}</div><div style="font-size:11px;color:#94a3b8;margin-top:6px;font-weight:600">💡 ${p.tip} • ${p.activities.length} activities</div><div style="margin-top:8px;display:flex;gap:6px;align-items:center;flex-wrap:wrap"><button class="audio-mini" onclick="event.stopPropagation(); playPlace('${p.id}','tr')" style="padding:4px 8px;border-radius:999px;background:rgba(14,116,144,.18);border:1px solid rgba(14,116,144,.32);color:#5eead4;font-size:11px;font-weight:700;cursor:pointer">🇹🇷 TR</button><button class="audio-mini" onclick="event.stopPropagation(); playPlace('${p.id}','en')" style="padding:4px 8px;border-radius:999px;background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.22);color:#fde68a;font-size:11px;font-weight:700;cursor:pointer">🇬🇧 EN</button><span style="font-size:11px;color:#94a3b8">tap card → buses + details</span></div>`;
-    div.onclick=()=>{ showPlaceDetail(p.id); try{ map.setView([p.lat,p.lon], 12); p._marker.openPopup(); }catch(e){} };
+    const firstBus=(p.buses&&p.buses[0])||'';
+    div.innerHTML=`<div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><b style="color:#f8fafc;font-size:15px;letter-spacing:-.01em">${catIcon[p.cat]||'📍'} ${p.name}</b><span style="font-size:10px;padding:4px 8px;border-radius:999px;background:${catColor[p.cat]||'#64748b'};color:white;font-weight:800;white-space:nowrap">${p.cat}</span></div><div style="font-size:13px;color:#e2e8f0;margin-top:6px;font-weight:600;line-height:1.5">${p.desc}</div><div style="margin-top:8px;display:grid;gap:6px"><div style="font-size:11.5px;color:#fde68a;background:rgba(245,158,11,.10);border:1px solid rgba(245,158,11,.22);border-radius:8px;padding:6px 8px">💡 <b>Mini tüyo:</b> ${p.tip}</div><div style="font-size:11.5px;color:#a5f3fc;background:rgba(14,116,144,.12);border:1px solid rgba(14,116,144,.28);border-radius:8px;padding:6px 8px">🚌 <b>${firstBus}</b>${p.buses.length>1?` <span style="color:#94a3b8">+${p.buses.length-1} hat</span>`:''}</div></div><div style="margin-top:8px;display:flex;gap:6px;align-items:center;flex-wrap:wrap"><button class="audio-mini" onclick="event.stopPropagation(); playPlace('${p.id}','tr')" style="padding:4px 8px;border-radius:999px;background:rgba(14,116,144,.18);border:1px solid rgba(14,116,144,.32);color:#5eead4;font-size:11px;font-weight:700;cursor:pointer">🇹🇷 TR dinle</button><button class="audio-mini" onclick="event.stopPropagation(); playPlace('${p.id}','en')" style="padding:4px 8px;border-radius:999px;background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.22);color:#fde68a;font-size:11px;font-weight:700;cursor:pointer">🇬🇧 EN listen</button><audio id="audio-${p.id}" controls preload="none" style="flex:1;min-width:140px;height:28px;border-radius:8px"></audio></div><div style="font-size:11px;color:#94a3b8;margin-top:6px">Karta tıkla → haritada zoom + tüm otobüsler + detay</div>`;
+    div.onclick=()=> focusPlace(p.id);
     el.appendChild(div);
   });
+  if(selectedId){ const s=document.querySelector(`#places > div[data-pid="${selectedId}"]`); if(s){ s.style.borderColor='#0e7490'; s.style.boxShadow='0 0 0 2px rgba(14,116,144,.45), 0 6px 16px rgba(0,0,0,.28)'; } }
 }
 function showPlaceDetail(id){
   const p=places.find(x=>x.id===id); if(!p) return;
@@ -107,13 +127,14 @@ function showPlaceDetail(id){
   el.style.display='block';
   el.innerHTML=`
     <div style="display:flex;justify-content:space-between;gap:12px;align-items:start">
-      <div><h3 style="font-family:Fraunces,serif;font-size:18px;color:#f1f3ff">${p.name}</h3><div style="font-size:12px;color:#cbd5e1">${p.desc} • <span style="color:#94a3b8">${p.cat}</span></div></div>
+      <div><h3 style="font-family:Fraunces,serif;font-size:18px;color:#f1f3ff">${p.name}</h3><div style="font-size:12px;color:#cbd5e1">${p.desc} • <span style="color:#94a3b8">${p.cat} • 📍 ${p.lat.toFixed(3)}, ${p.lon.toFixed(3)} — haritada zoomlandı</span></div></div>
       <button class="btn" onclick="document.getElementById('placeDetail').style.display='none'">✕</button>
     </div>
+    <div style="margin-top:10px;padding:10px;background:rgba(245,158,11,.10);border:1px solid rgba(245,158,11,.28);border-radius:12px;font-size:13px;color:#fde68a">💡 <b>Mini tüyo:</b> ${p.tip}</div>
     <div style="margin-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:12px">
       <div>
-        <div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9aa0c2;font-weight:800">🚌 Oraya giden otobüsler</div>
-        <ul style="margin:6px 0 0 16px;font-size:12.5px;color:#e2e8f0">${p.buses.map(b=>`<li>${b}</li>`).join('')}</ul>
+        <div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9aa0c2;font-weight:800">🚌 Oraya giden Denizli otobüsleri</div>
+        <ul style="margin:6px 0 0 16px;font-size:12.5px;color:#e2e8f0">${p.buses.map(b=>`<li><b>${b}</b></li>`).join('')}</ul>
         <div style="font-size:11px;color:#9aa0c2;margin-top:6px">Detaylı saatler için <a href="https://www.denizli.bel.tr/ulasim" target="_blank" style="color:#5eead4">denizli.bel.tr/ulasim</a> • Kart: Denizli Kart</div>
       </div>
       <div>
@@ -122,17 +143,16 @@ function showPlaceDetail(id){
       </div>
     </div>
     <div style="margin-top:12px;padding:10px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px">
-      <div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9aa0c2;font-weight:800">🎧 Voice Guide — Türkçe & English (güzel ses)</div>
+      <div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9aa0c2;font-weight:800">🎧 Audio Guide — ${p.name} için ayrı TR + EN</div>
       <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
         <button class="btn" style="background:rgba(14,116,144,.18);border-color:rgba(14,116,144,.32);color:#5eead4" onclick="playDetail('${p.id}','tr')">🇹🇷 Türkçe dinle</button>
         <button class="btn" style="background:rgba(245,158,11,.12);border-color:rgba(245,158,11,.22);color:#fde68a" onclick="playDetail('${p.id}','en')">🇬🇧 English listen</button>
-        <audio id="audio-detail" controls style="flex:1;min-width:160px;height:32px"></audio>
+        <audio id="audio-detail" controls preload="none" style="flex:1;min-width:160px;height:32px" src="audio/${p.id}_tr.mp3"></audio>
       </div>
-      <div style="font-size:11px;color:#9aa0c2;margin-top:6px">Her yer için ayrı TR (EmelNeural) + EN (JennyNeural) — edge-tts, offline MP3, robotik değil. Dosya: <code>audio/${p.id}_tr.mp3</code></div>
+      <div style="font-size:11px;color:#9aa0c2;margin-top:6px">TR (EmelNeural) + EN (JennyNeural) — edge-tts, offline MP3, robotik değil. Dosyalar: <code>audio/${p.id}_tr.mp3</code> + <code>audio/${p.id}_en.mp3</code></div>
     </div>
   `;
-  // also update map
-  try{ map.setView([p.lat,p.lon], 12); p._marker.openPopup(); }catch(e){}
+  // map zoom is handled by focusPlace(); keep popup in sync only
   // scroll into view
   el.scrollIntoView({behavior:'smooth', block:'nearest'});
 }
@@ -141,7 +161,7 @@ function findNearest(){
   navigator.geolocation.getCurrentPosition(pos=>{
     const {latitude,longitude}=pos.coords;
     const hav=(a,b,c,d)=>{const R=6371, dLat=(c-a)*Math.PI/180, dLon=(d-b)*Math.PI/180, e=Math.sin(dLat/2)**2+Math.cos(a*Math.PI/180)*Math.cos(c*Math.PI/180)*Math.sin(dLon/2)**2; return R*2*Math.asin(Math.sqrt(e));};
-    let best=null, d0=Infinity; places.forEach(p=>{const d=hav(latitude,longitude,p.lat,p.lon); if(d<d0){d0=d;best=p;}}); if(best){alert(`Nearest: ${best.name} ${d0.toFixed(0)}km`); map.setView([best.lat,best.lon],12); best._marker.openPopup();}
+    let best=null, d0=Infinity; places.forEach(p=>{const d=hav(latitude,longitude,p.lat,p.lon); if(d<d0){d0=d;best=p;}}); if(best){ focusPlace(best.id); }
   });
 }
 function playPlace(id, lang){

@@ -11,9 +11,9 @@
 </p>
 
 <p align="center">
-  <b>Live — Latest Build (v7, 26 places + monuments, readable + per-place audio):</b> <a href="https://flynntaggart26.github.io/denizli-guide/">https://flynntaggart26.github.io/denizli-guide/</a><br>
+  <b>Live — Latest Build (v8, 26 places + monuments, zoom + buses + tips + full TR/EN audio):</b> <a href="https://flynntaggart26.github.io/denizli-guide/">https://flynntaggart26.github.io/denizli-guide/</a><br>
   <b>Official DBB Website:</b> <a href="https://www.denizli.bel.tr">https://www.denizli.bel.tr</a> — always verify hours/prices there.<br>
-  <sub>Offline-first • No tracking • No backend • <code>style.css?v=7</code> / <code>app.js?v=7</code> • Hard refresh <code>Ctrl+Shift+R</code> after update</sub>
+  <sub>Offline-first • No tracking • No backend • <code>style.css?v=8</code> / <code>app.js?v=8</code> • Hard refresh <code>Ctrl+Shift+R</code> after update</sub>
 </p>
 
 ---
@@ -84,12 +84,12 @@ Most Denizli guides are scattered PDFs, hotel brochures, or online-only blogs th
 | 26 | Bekilli Vineyards | Food | Shiraz, Boğazkere |
 
 - **Map:** Leaflet 1.9.4 (BSD 2-Clause) + OSM tiles (© OSM, ODbL) — 26 pins with original 1–2 sentence descriptions. No Google API, no key.
-- **UX:** Search + category filter (`Ancient / Nature / City / Monument / Food`), **dark filters** (`rgba(255,255,255,.06)`, `#f1f3ff` text), click card → `map.setView(12)` + popup, **📍 Nearest** via `navigator.geolocation` + haversine, no server. Category badges color-coded (Ancient purple, Nature green, City blue, Monument amber, Food red).
+- **UX:** Search + category filter (`Ancient / Nature / City / Monument / Food`), click card or map pin → **smooth zoom to level 13 + popup**, selected card highlighted, detail panel opens with **all Denizli bus numbers**, **mini tüyo box**, activities, and **per-place TR/EN audio**. **📍 Nearest** flies to the closest place via `navigator.geolocation` + haversine, no server. Category badges color-coded (Ancient purple, Nature green, City blue, Monument amber, Food red).
 - **Climate:** 12-month avg temps for Denizli (MGM normals 1991–2020, public domain) — 12 bars, `8 + temp/30*28` height, month + °C labels.
 
-### 🎧 Audio Guide — Every Place, Both Languages (v7)
+### 🎧 Audio Guide — Every Place, Both Languages (v8)
 
-*Not robotic, both TR and EN.* Generated with **Python `edge-tts`** — `tr-TR-EmelNeural` + `en-US-JennyNeural` (Microsoft Neural), offline MP3s. **16 core places have TR + EN** (30 files, 24-61KB each) + the complete Pamukkale guide (341KB/297KB) — total 32 MP3s in `audio/`. The 10 new v7 spots (Cleopatra Pool, St. Philip, Museum, Colossae, Beycesultan, Kaleiçi + 5 monuments) reuse the same player and gracefully fall back until their MP3s are generated — run `audio/generate_all.py` to add them.
+*Not robotic, both TR and EN.* Generated with **Python `edge-tts`** — `tr-TR-EmelNeural` + `en-US-JennyNeural` (Microsoft Neural), offline MP3s. **All 26 places now have TR + EN** (52 files, 24-61KB each) + the complete Pamukkale guide (341KB/297KB) — total 54 MP3s in `audio/`. Each card has its own `🇹🇷 TR dinle / 🇬🇧 EN listen` buttons + player, and the detail panel auto-loads that place's TR guide. Reproducible via `audio/generate_all.py` + `audio/generate_v7.py`.
 
 - **Top player:** Pamukkale complete guide (1 min, original script: travertine → Hierapolis → Cleopatra Pool → sunrise tip) with `🇹🇷/🇬🇧` switch + transcript.
 - **Per-place cards:** Each card in Discover now has `🇹🇷 TR / 🇬🇧 EN` buttons + `<audio>` controls — tap to hear that place’s own 1-sentence guide in beautiful neural voice (e.g., Hierapolis, Laodicea, Kaklık...). Files: `audio/hier_tr.mp3`, `audio/lao_en.mp3`, etc. (naming = `id_lang.mp3`).
@@ -148,22 +148,22 @@ Most Denizli guides are scattered PDFs, hotel brochures, or online-only blogs th
 
 ```
 denizli-guide/
-├── index.html   # v7 cache bust, header DBB, audio guide top + per-place TR/EN players, Monument filter
+├── index.html   # v8 cache bust, header DBB, audio guide top + per-place TR/EN players, Monument filter
 ├── style.css    # Bosphorus Nights dark (070b1a), solid dark cards #1e293b — readable
-├── app.js       # 26 places (Ancient/Nature/City/Monument/Food), dark cards + playPlace(id,lang), route, climate
+├── app.js       # 26 places (Ancient/Nature/City/Monument/Food), focusPlace() zoom-13 + buses + tips + per-card audio
 ├── audio/
 │   ├── pamukkale_tr.mp3 / pamukkale_en.mp3  # complete guide (341/297KB)
-│   ├── pam_tr.mp3 / pam_en.mp3, hier_tr.mp3 ... bek_tr.mp3  # core 16 places × TR/EN (24-61KB)
-│   ├── generate.py / generate_all.py        # edge-tts reproducible (Emel/Jenny Neural)
+│   ├── *_tr.mp3 / *_en.mp3 for all 26 ids   # per-place 1-2 sentences (24-61KB ×52)
+│   ├── generate.py / generate_all.py / generate_v7.py  # edge-tts reproducible (Emel/Jenny Neural)
 │   └── *_tr.txt / *_en.txt                  # original scripts
-└── README.md    # this file (v7)
+└── README.md    # this file (v8)
 ```
 
 ---
 
 ## 📄 Actual `index.html` (Live File)
 
-This is the **actual `index.html`** deployed to Pages (v7, `style.css?v=7` / `app.js?v=7`). No separate build — what you see on GitHub is what runs live.
+This is the **actual `index.html`** deployed to Pages (v8, `style.css?v=8` / `app.js?v=8`). No separate build — what you see on GitHub is what runs live.
 
 - **View on GitHub:** [https://github.com/Flynntaggart26/denizli-guide/blob/main/index.html](https://github.com/Flynntaggart26/denizli-guide/blob/main/index.html)
 - **Raw:** `https://raw.githubusercontent.com/Flynntaggart26/denizli-guide/main/index.html`
@@ -180,7 +180,7 @@ This is the **actual `index.html`** deployed to Pages (v7, `style.css?v=7` / `ap
 <title>Discover Denizli — Complete Guide</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700&family=Inter:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-<link rel="stylesheet" href="style.css?v=7">
+<link rel="stylesheet" href="style.css?v=8">
 </head>
 <body>
 <header class="header">
@@ -228,7 +228,8 @@ Live: **https://flynntaggart26.github.io/denizli-guide/** (GitHub Pages, `main` 
 - [x] v1.0 — 15 places + map + food + history + plan
 - [x] v1.1 — Pamukkale audio (neural) + dark readable + DBB links
 - [x] v7 — 26 places + Monument category (statues, memorials), empty-list bug fix, README sync
-- [ ] v1.2 — PWA + offline tile cache + AR travertine overlay + MP3s for 10 new spots
+- [x] v8 — per-place TR/EN audio for all 26, focusPlace zoom-13, bus numbers + mini tips on cards and detail
+- [ ] v1.2 — PWA + offline tile cache + AR travertine overlay
 
 ---
 
@@ -238,5 +239,5 @@ Live: **https://flynntaggart26.github.io/denizli-guide/** (GitHub Pages, `main` 
 
 Built with ❤️ in Denizli — for tourists and for locals who want to show their city.
 
-*Last update: September 2026 — v7, 26 places + monuments, readable dark cards, TR/EN audio for core 16.*
+*Last update: September 2026 — v8, 26 places + monuments, zoom + buses + tips + full TR/EN audio.*
 
