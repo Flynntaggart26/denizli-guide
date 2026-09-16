@@ -2,7 +2,7 @@
 
 > Complete offline guide for Denizli, Türkiye: 15 places, Pamukkale & Hierapolis, Laodicea, Kaklik Cave, local food, history timeline, map, itineraries & budget. Built for tourists and locals.
 
-**Live:** https://flynntaggart26.github.io/denizli-guide/ · **Stack:** Vanilla HTML/CSS/JS + Leaflet (BSD) · **Offline:** localStorage, no backend
+**Live:** https://flynntaggart26.github.io/denizli-guide/ · **Official:** [denizli.bel.tr](https://www.denizli.bel.tr) (Denizli Büyükşehir Belediyesi) · **Stack:** Vanilla HTML/CSS/JS + Leaflet (BSD) · **Offline:** localStorage, no backend
 
 ---
 
@@ -25,9 +25,11 @@
 - **Budget:** travelers × days × tier (avg 600/1100/1900 TRY)
 - **Route Optimizer:** pick places → nearest-neighbor + 2-opt, total km, polyline on map
 
-### ℹ Essentials
-- Getting there (Çardak Airport, bus, train), in-city (dolmuş, BiTaksi), stay, emergency 112/155, useful Turkish, events (Rooster Festival etc.)
-- Legal: Map ODbL, Leaflet BSD, texts original, MIT
+### ℹ Essentials — with Official DBB Links
+- Getting there (Çardak Airport, bus, train) → [DBB Transport](https://www.denizli.bel.tr/ulasim), in-city (dolmuş, BiTaksi), stay, emergency 112/155, useful Turkish, events → [DBB Events](https://www.denizli.bel.tr/etkinlikler) (Rooster Festival etc.)
+- Hotels & culture → [DBB Culture](https://www.denizli.bel.tr/kultur-sanat) · Map footer links to [denizli.bel.tr](https://www.denizli.bel.tr) for verification
+- **UI Fix v1.0.1:** Hero stats now clearly visible (1M+ / 2,200 / 19 / 🐓), map-card fixed (520px + border), travertine polish, header `🏛 DBB Official →` button
+- Legal: Map © OSM (ODbL) via Leaflet (BSD 2-Clause). All texts original, no Wikipedia copy. No photos bundled. Offline, MIT.
 
 ---
 
