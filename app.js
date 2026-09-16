@@ -57,9 +57,11 @@ function renderPlaces(){
     return true;
   }).forEach(p=>{
     const div=document.createElement('div');
-    div.style.cssText='background:white;border:1px solid #f0e6d9;border-radius:14px;padding:12px;cursor:pointer';
-    div.innerHTML=`<div style="display:flex;justify-content:space-between"><b>${p.name}</b><span style="font-size:10px;padding:3px 7px;border-radius:999px;background:#f0e6d9;font-weight:700">${p.cat}</span></div><div style="font-size:12px;color:#4b5563">${p.desc}</div><div style="font-size:11px;color:#7a819c">${p.tip}</div>`;
+    div.style.cssText='background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:14px;cursor:pointer;backdrop-filter:blur(8px);box-shadow:0 4px 12px rgba(0,0,0,.18)';
+    div.innerHTML=`<div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><b style="color:#fff;font-size:14px;letter-spacing:-.01em">${p.name}</b><span style="font-size:10px;padding:4px 8px;border-radius:999px;background:linear-gradient(135deg,#f59e0b,#e11d48);color:white;font-weight:800">${p.region}</span></div><div style="font-size:12.5px;color:#e2e8f0;margin-top:4px;font-weight:500">${p.desc}</div><div style="font-size:11px;color:#94a3b8;margin-top:6px;font-weight:600">${p.best} • Mid €${p.budget.mid}/day • ${p.tip}</div>`;
     div.onclick=()=>{ map.setView([p.lat,p.lon], 12); p._marker.openPopup(); };
+    div.onmouseenter=()=> div.style.borderColor='rgba(245,158,11,.32)';
+    div.onmouseleave=()=> div.style.borderColor='rgba(255,255,255,.14)';
     el.appendChild(div);
   });
 }
