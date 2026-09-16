@@ -58,7 +58,7 @@ function renderPlaces(){
   }).forEach(p=>{
     const div=document.createElement('div');
     div.style.cssText='background:#1e293b;border:1px solid #334155;border-radius:14px;padding:14px;cursor:pointer;box-shadow:0 6px 16px rgba(0,0,0,.28)';
-    div.innerHTML=`<div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><b style="color:#f8fafc;font-size:15px;letter-spacing:-.01em">${p.name}</b><span style="font-size:10px;padding:4px 8px;border-radius:999px;background:#f59e0b;color:white;font-weight:800">${p.region}</span></div><div style="font-size:13px;color:#e2e8f0;margin-top:6px;font-weight:600;line-height:1.5">${p.desc}</div><div style="font-size:11px;color:#94a3b8;margin-top:6px;font-weight:600">${p.best} • Mid €${p.budget.mid}/day • ${p.tip}</div>`;
+    div.innerHTML=`<div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><b style="color:#f8fafc;font-size:15px;letter-spacing:-.01em">${p.name}</b><span style="font-size:10px;padding:4px 8px;border-radius:999px;background:#f59e0b;color:white;font-weight:800">${p.region}</span></div><div style="font-size:13px;color:#e2e8f0;margin-top:6px;font-weight:600;line-height:1.5">${p.desc}</div><div style="font-size:11px;color:#94a3b8;margin-top:6px;font-weight:600">${p.best} • Mid €${p.budget.mid}/day • ${p.tip}</div><div style="margin-top:8px;display:flex;gap:6px;align-items:center;flex-wrap:wrap"><button class="audio-mini" onclick="event.stopPropagation(); playPlace('${p.id}','tr')" style="padding:4px 8px;border-radius:999px;background:rgba(14,116,144,.18);border:1px solid rgba(14,116,144,.32);color:#5eead4;font-size:11px;font-weight:700;cursor:pointer">🇹🇷 TR</button><button class="audio-mini" onclick="event.stopPropagation(); playPlace('${p.id}','en')" style="padding:4px 8px;border-radius:999px;background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.22);color:#fde68a;font-size:11px;font-weight:700;cursor:pointer">🇬🇧 EN</button><audio id="audio-${p.id}" controls preload="none" style="flex:1;min-width:120px;height:28px;border-radius:8px"></audio></div>`;
     div.onclick=()=>{ try{ map.setView([p.lat,p.lon], 12); p._marker.openPopup(); }catch(e){ console.error(e); alert('Map not ready, try again'); } };
     el.appendChild(div);
   });
@@ -70,6 +70,18 @@ function findNearest(){
     const hav=(a,b,c,d)=>{const R=6371, dLat=(c-a)*Math.PI/180, dLon=(d-b)*Math.PI/180, e=Math.sin(dLat/2)**2+Math.cos(a*Math.PI/180)*Math.cos(c*Math.PI/180)*Math.sin(dLon/2)**2; return R*2*Math.asin(Math.sqrt(e));};
     let best=null, d0=Infinity; places.forEach(p=>{const d=hav(latitude,longitude,p.lat,p.lon); if(d<d0){d0=d;best=p;}}); if(best){alert(`Nearest: ${best.name} ${d0.toFixed(0)}km`); map.setView([best.lat,best.lon],12); best._marker.openPopup();}
   });
+}
+function playPlace(id, lang){
+  const audio=document.getElementById(`audio-${id}`);
+  if(!audio) return;
+  const src=`audio/${id}_${lang}.mp3`;
+  // toggle play/pause if same src
+  if(audio.src.includes(src) && !audio.paused){
+    audio.pause(); return;
+  }
+  audio.src=src;
+  audio.load();
+  audio.play().catch(()=> alert('Audio not found: '+src));
 }
 function speak(t){ if(!('speechSynthesis'in window))return; const u=new SpeechSynthesisUtterance(t); u.lang=lang==='tr'?'tr-TR':'en-US'; u.rate=0.9; speechSynthesis.cancel(); speechSynthesis.speak(u); }
 function renderFood(){
