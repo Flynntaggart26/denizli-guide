@@ -149,6 +149,43 @@ denizli-guide/
 
 ---
 
+## 📄 Actual `index.html` (Live File)
+
+This is the **actual `index.html`** deployed to Pages (v5, 174 lines, `style.css?v=5` / `app.js?v=5`). No separate build — what you see on GitHub is what runs live.
+
+- **View on GitHub:** [https://github.com/Flynntaggart26/denizli-guide/blob/main/index.html](https://github.com/Flynntaggart26/denizli-guide/blob/main/index.html)
+- **Raw:** `https://raw.githubusercontent.com/Flynntaggart26/denizli-guide/main/index.html`
+- **Live:** [https://flynntaggart26.github.io/denizli-guide/](https://flynntaggart26.github.io/denizli-guide/)
+
+<details><summary>Click to expand — first 60 lines of actual <code>index.html</code></summary>
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Discover Denizli — Complete Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700&family=Inter:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="style.css?v=5">
+</head>
+<body>
+<header class="header">
+  <div class="head-inner">
+    <div class="logo"><div class="mark">DZ</div><div><h1>Discover Denizli</h1><p>Official Companion • Offline • EN/TR</p></div></div>
+    <div class="head-actions">
+      <a href="https://www.denizli.bel.tr" target="_blank" class="btn" style="background:#0e7490;color:white">🏛 DBB Official →</a>
+...
+</html>
+```
+
+Full file is exactly as in repo — 174 lines, vanilla, no build.
+
+</details>
+
+---
+
 ## Getting Started
 
 ```bash
