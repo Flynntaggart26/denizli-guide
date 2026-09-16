@@ -30,7 +30,7 @@
 ### ℹ Essentials — with Official DBB Links
 - Getting there (Çardak Airport, bus, train) → [DBB Transport](https://www.denizli.bel.tr/ulasim), in-city (dolmuş, BiTaksi), stay, emergency 112/155, useful Turkish, events → [DBB Events](https://www.denizli.bel.tr/etkinlikler) (Rooster Festival etc.)
 - Hotels & culture → [DBB Culture](https://www.denizli.bel.tr/kultur-sanat) · Map footer links to [denizli.bel.tr](https://www.denizli.bel.tr) for verification
-- **UI Fix v1.0.1:** Hero stats now clearly visible (1M+ / 2,200 / 19 / 🐓), map-card fixed (520px + border), travertine polish, header `🏛 DBB Official →` button
+- **UI Fix v1.1.0 (dark):** Hero stats visible, map-card fixed, **all whites → dark glass** (place cards, filters, search are now `rgba(255,255,255,.05)` with light text `#f1f3ff`/`#cbd5e1`, no flat white left), Bosphorus Nights dark theme
 - Legal: Map © OSM (ODbL) via Leaflet (BSD 2-Clause). All texts original, no Wikipedia copy. No photos bundled. Offline, MIT.
 
 ---
@@ -49,10 +49,10 @@
 
 ```
 denizli-guide/
-├── index.html   # + DBB button + map fix
-├── style.css    # dark Bosphorus Nights (070b1a) — fixed
-├── app.js       # debugged (duplicate timeline removed), dark timeline cards
-└── README.md
+├── index.html   # v4 cache bust, dark filters, DBB links
+├── style.css    # dark Bosphorus Nights (070b1a), glass cards — all whites fixed
+├── app.js       # debugged (duplicate timeline), dark place cards + filters
+└── README.md    # + Official Links table + DBB
 ```
 
 ## Getting started
