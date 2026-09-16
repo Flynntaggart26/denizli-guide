@@ -1,19 +1,19 @@
 const places=[
-  {id:'pam', name:'Pamukkale Travertines', cat:'Nature', lat:37.9249, lon:29.1214, desc:'White calcium terraces, UNESCO. Walk barefoot, swim in Cleopatra Pool.', tip:'Sunrise, no shoes.'},
-  {id:'hier', name:'Hierapolis Ancient City', cat:'Ancient', lat:37.9255, lon:29.1260, desc:'Roman city above travertines, theatre and necropolis.', tip:'Combo ticket with Pamukkale.'},
-  {id:'lao', name:'Laodicea', cat:'Ancient', lat:37.8371, lon:29.1079, desc:'Ancient trade city, churches and stadium.', tip:'10km from Denizli center.'},
-  {id:'kak', name:'Kaklık Cave', cat:'Nature', lat:37.8360, lon:29.4340, desc:'Underground Pamukkale — travertine cave with pool.', tip:'30km east, less crowded.'},
-  {id:'hon', name:'Honaz Mountain', cat:'Nature', lat:37.6810, lon:29.2760, desc:'Highest in Aegean (2571m), paragliding and hiking.', tip:'Spring wildflowers.'},
-  {id:'kar', name:'Karahayıt Red Springs', cat:'Nature', lat:37.9630, lon:29.0740, desc:'Red thermal springs, spa hotels.', tip:'Stay for thermal.'},
-  {id:'bul', name:'Buldan', cat:'City', lat:38.0450, lon:28.8290, desc:'Textile town, historic houses, peshtemal.', tip:'Buy Buldan cloth.'},
-  {id:'sar', name:'Sarayköy', cat:'City', lat:37.9250, lon:28.9250, desc:'Vineyards and old train station.', tip:'Wine tasting.'},
-  {id:'civ', name:'Işıklı Lake (Çivril)', cat:'Nature', lat:38.2240, lon:29.8900, desc:'Lotus lake, bird watching, boat tour.', tip:'July lotus bloom.'},
-  {id:'cam', name:'Denizli Teleferik & Bağbaşı', cat:'Nature', lat:37.7420, lon:29.0710, desc:'Cable car to 1400m, city view.', tip:'Sunset ride.'},
-  {id:'for', name:'Forum Çamlık', cat:'City', lat:37.7830, lon:29.0850, desc:'Modern center, cafes and shopping.', tip:'Evening walk.'},
-  {id:'tri', name:'Tripolis (Yenicekent)', cat:'Ancient', lat:38.0500, lon:28.5800, desc:'Lydian-Roman city, mosaics.', tip:'North, near Buldan.'},
-  {id:'aga', name:'Ağlayan Kaya', cat:'Nature', lat:37.8600, lon:29.3200, desc:'Mythological Niobe rock, Honaz foothills.', tip:'Hiking stop.'},
-  {id:'gun', name:'Güney Falls', cat:'Nature', lat:38.1500, lon:29.0500, desc:'Waterfall and picnic, cool in summer.', tip:'Family picnic.'},
-  {id:'bek', name:'Bekilli Vineyards', cat:'Food', lat:38.2300, lon:29.4200, desc:'Wine route, Shiraz and Boğazkere.', tip:'Autumn harvest.'},
+  {id:'pam', name:'Pamukkale Travertines', cat:'Nature', lat:37.9249, lon:29.1214, desc:'White calcium terraces, UNESCO. Walk barefoot, swim in Cleopatra Pool.', tip:'Sunrise, no shoes.', buses:['Pamukkale (301, 300) • Denizli Otogar → Pamukkale every 15 min','Karahayıt (270)'], activities:['Walk travertines barefoot','Swim Cleopatra Pool','Photo at sunrise']},
+  {id:'hier', name:'Hierapolis Ancient City', cat:'Ancient', lat:37.9255, lon:29.1260, desc:'Roman city above travertines, theatre and necropolis.', tip:'Combo ticket with Pamukkale.', buses:['Pamukkale (301) — same as travertines, walk up'], activities:['Theatre','Necropolis','Archaeology Museum']},
+  {id:'lao', name:'Laodicea', cat:'Ancient', lat:37.8371, lon:29.1079, desc:'Ancient trade city, churches and stadium.', tip:'10km from Denizli center.', buses:['Laodicea (260) • City → Eskihisar','Minibus from Otogar'], activities:['Stadium','Church','Ancient street']},
+  {id:'kak', name:'Kaklık Cave', cat:'Nature', lat:37.8360, lon:29.4340, desc:'Underground Pamukkale — travertine cave with pool.', tip:'30km east, less crowded.', buses:['Kaklık (210) • Honaz-Kaklık minibus'], activities:['Cave walk','Pool','Photo with stalactites']},
+  {id:'hon', name:'Honaz Mountain', cat:'Nature', lat:37.6810, lon:29.2760, desc:'Highest in Aegean (2571m), paragliding and hiking.', tip:'Spring wildflowers.', buses:['Honaz (110) • City → Honaz','Paragliding shuttle'], activities:['Hike to summit','Paragliding','Picnic']},
+  {id:'kar', name:'Karahayıt Red Springs', cat:'Nature', lat:37.9630, lon:29.0740, desc:'Red thermal springs, spa hotels.', tip:'Stay for thermal.', buses:['Karahayıt (270) • Pamukkale line'], activities:['Red water photo','Thermal bath','Spa']},
+  {id:'bul', name:'Buldan', cat:'City', lat:38.0450, lon:28.8290, desc:'Textile town, historic houses, peshtemal.', tip:'Buy Buldan cloth.', buses:['Buldan (720) • Denizli Otogar → Buldan 1h'], activities:['Historic houses','Weaving workshop','Bazaar']},
+  {id:'sar', name:'Sarayköy', cat:'City', lat:37.9250, lon:28.9250, desc:'Vineyards and old train station.', tip:'Wine tasting.', buses:['Sarayköy (310) • Train Denizli → Sarayköy 20min'], activities:['Vineyard tour','Train station','Wine']},
+  {id:'civ', name:'Işıklı Lake (Çivril)', cat:'Nature', lat:38.2240, lon:29.8900, desc:'Lotus lake, bird watching, boat tour.', tip:'July lotus bloom.', buses:['Çivril (760) • Denizli → Çivril 1h15'], activities:['Lotus boat','Bird watch','Sunset']},
+  {id:'cam', name:'Denizli Teleferik & Bağbaşı', cat:'Nature', lat:37.7420, lon:29.0710, desc:'Cable car to 1400m, city view.', tip:'Sunset ride.', buses:['Bağbaşı (120, 130, 150) • Bayramyeri → Teleferik','Teleferik shuttle'], activities:['Cable car','Bağbaşı plateau','Paragliding','Zipline','Evening tea']},
+  {id:'for', name:'Forum Çamlık', cat:'City', lat:37.7830, lon:29.0850, desc:'Modern center, cafes and shopping.', tip:'Evening walk.', buses:['All city buses to Çınar / Bayramyeri — 100, 101, 102'], activities:['Cafe','Shopping','Cinema']},
+  {id:'tri', name:'Tripolis (Yenicekent)', cat:'Ancient', lat:38.0500, lon:28.5800, desc:'Lydian-Roman city, mosaics.', tip:'North, near Buldan.', buses:['Buldan (720) + walk 2km or taxi'], activities:['Mosaics','Agora','Quiet ruins']},
+  {id:'aga', name:'Ağlayan Kaya', cat:'Nature', lat:37.8600, lon:29.3200, desc:'Mythological Niobe rock, Honaz foothills.', tip:'Hiking stop.', buses:['Honaz (110) + taxi 5km'], activities:['Hiking','Myth photo','Forest']},
+  {id:'gun', name:'Güney Falls', cat:'Nature', lat:38.1500, lon:29.0500, desc:'Waterfall and picnic, cool in summer.', tip:'Family picnic.', buses:['Güney (730) • Denizli → Güney 1h'], activities:['Waterfall','Picnic','Cool air']},
+  {id:'bek', name:'Bekilli Vineyards', cat:'Food', lat:38.2300, lon:29.4200, desc:'Wine route, Shiraz and Boğazkere.', tip:'Autumn harvest.', buses:['Bekilli (740) • Çal-Bekilli minibus'], activities:['Wine tasting','Vineyard walk','Harvest Sep-Oct']},
 ];
 const foods=[
   {name:'Denizli Tandır Kebabı', desc:'Kuzunun tandırda 6 saat odun ateşinde pişmesi — Denizli’nin en meşhur yemeği. Bayramyeri ve Kaleiçi’nde her lokantada var.', allergens:['meat'], price:'220-320 TRY', cat:'Kebab', note:'Vejetaryen/vegan için uygun değil. Et alerjisi olanlar kaçınmalı.'},
@@ -76,11 +76,46 @@ function renderPlaces(){
     return true;
   }).forEach(p=>{
     const div=document.createElement('div');
-    div.style.cssText='background:#1e293b;border:1px solid #334155;border-radius:14px;padding:14px;cursor:pointer;box-shadow:0 6px 16px rgba(0,0,0,.28)';
+    div.style.cssText='background:#1e293b;border:1px solid #334155;border-radius:14px;padding:14px;cursor:pointer;box-shadow:0 6px 16px rgba(0,0,0,.28);transition:.16s';
     div.innerHTML=`<div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><b style="color:#f8fafc;font-size:15px;letter-spacing:-.01em">${p.name}</b><span style="font-size:10px;padding:4px 8px;border-radius:999px;background:#f59e0b;color:white;font-weight:800">${p.region}</span></div><div style="font-size:13px;color:#e2e8f0;margin-top:6px;font-weight:600;line-height:1.5">${p.desc}</div><div style="font-size:11px;color:#94a3b8;margin-top:6px;font-weight:600">${p.best} • Mid €${p.budget.mid}/day • ${p.tip}</div><div style="margin-top:8px;display:flex;gap:6px;align-items:center;flex-wrap:wrap"><button class="audio-mini" onclick="event.stopPropagation(); playPlace('${p.id}','tr')" style="padding:4px 8px;border-radius:999px;background:rgba(14,116,144,.18);border:1px solid rgba(14,116,144,.32);color:#5eead4;font-size:11px;font-weight:700;cursor:pointer">🇹🇷 TR</button><button class="audio-mini" onclick="event.stopPropagation(); playPlace('${p.id}','en')" style="padding:4px 8px;border-radius:999px;background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.22);color:#fde68a;font-size:11px;font-weight:700;cursor:pointer">🇬🇧 EN</button><audio id="audio-${p.id}" controls preload="none" style="flex:1;min-width:120px;height:28px;border-radius:8px"></audio></div>`;
-    div.onclick=()=>{ try{ map.setView([p.lat,p.lon], 12); p._marker.openPopup(); }catch(e){ console.error(e); alert('Map not ready, try again'); } };
+    div.onclick=()=>{ showPlaceDetail(p.id); try{ map.setView([p.lat,p.lon], 12); p._marker.openPopup(); }catch(e){} };
     el.appendChild(div);
   });
+}
+function showPlaceDetail(id){
+  const p=places.find(x=>x.id===id); if(!p) return;
+  const el=document.getElementById('placeDetail');
+  el.style.display='block';
+  el.innerHTML=`
+    <div style="display:flex;justify-content:space-between;gap:12px;align-items:start">
+      <div><h3 style="font-family:Fraunces,serif;font-size:18px;color:#f1f3ff">${p.name}</h3><div style="font-size:12px;color:#cbd5e1">${p.desc} • <span style="color:#94a3b8">${p.cat}</span></div></div>
+      <button class="btn" onclick="document.getElementById('placeDetail').style.display='none'">✕</button>
+    </div>
+    <div style="margin-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div>
+        <div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9aa0c2;font-weight:800">🚌 Oraya giden otobüsler</div>
+        <ul style="margin:6px 0 0 16px;font-size:12.5px;color:#e2e8f0">${p.buses.map(b=>`<li>${b}</li>`).join('')}</ul>
+        <div style="font-size:11px;color:#9aa0c2;margin-top:6px">Detaylı saatler için <a href="https://www.denizli.bel.tr/ulasim" target="_blank" style="color:#5eead4">denizli.bel.tr/ulasim</a> • Kart: Denizli Kart</div>
+      </div>
+      <div>
+        <div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9aa0c2;font-weight:800">🎯 Tavsiye edilen etkinlikler</div>
+        <ul style="margin:6px 0 0 16px;font-size:12.5px;color:#e2e8f0">${p.activities.map(a=>`<li>${a}</li>`).join('')}</ul>
+      </div>
+    </div>
+    <div style="margin-top:12px;padding:10px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px">
+      <div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9aa0c2;font-weight:800">🎧 Voice Guide — Türkçe & English (güzel ses)</div>
+      <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+        <button class="btn" style="background:rgba(14,116,144,.18);border-color:rgba(14,116,144,.32);color:#5eead4" onclick="playDetail('${p.id}','tr')">🇹🇷 Türkçe dinle</button>
+        <button class="btn" style="background:rgba(245,158,11,.12);border-color:rgba(245,158,11,.22);color:#fde68a" onclick="playDetail('${p.id}','en')">🇬🇧 English listen</button>
+        <audio id="audio-detail" controls style="flex:1;min-width:160px;height:32px"></audio>
+      </div>
+      <div style="font-size:11px;color:#9aa0c2;margin-top:6px">Her yer için ayrı TR (EmelNeural) + EN (JennyNeural) — edge-tts, offline MP3, robotik değil. Dosya: <code>audio/${p.id}_tr.mp3</code></div>
+    </div>
+  `;
+  // also update map
+  try{ map.setView([p.lat,p.lon], 12); p._marker.openPopup(); }catch(e){}
+  // scroll into view
+  el.scrollIntoView({behavior:'smooth', block:'nearest'});
 }
 function findNearest(){
   if(!navigator.geolocation){ alert('No geolocation'); return; }
@@ -94,13 +129,14 @@ function playPlace(id, lang){
   const audio=document.getElementById(`audio-${id}`);
   if(!audio) return;
   const src=`audio/${id}_${lang}.mp3`;
-  // toggle play/pause if same src
-  if(audio.src.includes(src) && !audio.paused){
-    audio.pause(); return;
-  }
-  audio.src=src;
-  audio.load();
-  audio.play().catch(()=> alert('Audio not found: '+src));
+  if(audio.src.includes(src) && !audio.paused){ audio.pause(); return; }
+  audio.src=src; audio.load(); audio.play().catch(()=> alert('Audio not found: '+src));
+}
+function playDetail(id, lang){
+  const audio=document.getElementById('audio-detail');
+  if(!audio) return;
+  const src=`audio/${id}_${lang}.mp3`;
+  audio.src=src; audio.load(); audio.play().catch(()=>{});
 }
 function speak(t){ if(!('speechSynthesis'in window))return; const u=new SpeechSynthesisUtterance(t); u.lang=lang==='tr'?'tr-TR':'en-US'; u.rate=0.9; speechSynthesis.cancel(); speechSynthesis.speak(u); }
 function renderFood(){
