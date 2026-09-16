@@ -2,7 +2,9 @@
 
 > Complete offline guide for Denizli, Türkiye: 15 places, Pamukkale & Hierapolis, Laodicea, Kaklik Cave, local food, history timeline, map, itineraries & budget. Built for tourists and locals.
 
-**Live:** https://flynntaggart26.github.io/denizli-guide/ · **Official:** [denizli.bel.tr](https://www.denizli.bel.tr) (Denizli Büyükşehir Belediyesi) · **Stack:** Vanilla HTML/CSS/JS + Leaflet (BSD) · **Offline:** localStorage, no backend
+**Live:** https://flynntaggart26.github.io/denizli-guide/ · **Official DBB Website:** [https://www.denizli.bel.tr](https://www.denizli.bel.tr) (Denizli Büyükşehir Belediyesi) · **Stack:** Vanilla HTML/CSS/JS + Leaflet (BSD) · **Offline:** localStorage, no backend
+
+> **Actual DBB link:** `https://www.denizli.bel.tr` — click above to verify hours, prices, events on the official municipality site (also linked in header button, map footer, and Essentials).
 
 ---
 
@@ -33,13 +35,23 @@
 
 ---
 
+## 🔗 Official Links
+
+| Link | URL |
+|------|-----|
+| **Live Demo (this guide)** | [https://flynntaggart26.github.io/denizli-guide/](https://flynntaggart26.github.io/denizli-guide/) |
+| **DBB Official Website** | [https://www.denizli.bel.tr](https://www.denizli.bel.tr) |
+| **DBB Transport** | [https://www.denizli.bel.tr/ulasim](https://www.denizli.bel.tr/ulasim) |
+| **DBB Culture** | [https://www.denizli.bel.tr/kultur-sanat](https://www.denizli.bel.tr/kultur-sanat) |
+| **DBB Events** | [https://www.denizli.bel.tr/etkinlikler](https://www.denizli.bel.tr/etkinlikler) |
+
 ## Project structure
 
 ```
 denizli-guide/
-├── index.html
-├── style.css  # travertine white + turquoise, Fraunces headings
-├── app.js
+├── index.html   # + DBB button + map fix
+├── style.css    # dark Bosphorus Nights (070b1a) — fixed
+├── app.js       # debugged (duplicate timeline removed), dark timeline cards
 └── README.md
 ```
 
