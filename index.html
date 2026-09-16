@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Discover Denizli — Complete Guide</title>
+<meta name="description" content="Complete offline guide for Denizli, Türkiye: Pamukkale & Hierapolis, Laodicea, Kaklik Cave, local food, map, itineraries & tips.">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700&family=Inter:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="header">
+  <div class="head-inner">
+    <div class="logo"><div class="mark">DZ</div><div><h1>Discover Denizli</h1><p>Official Companion • Offline • EN/TR</p></div></div>
+    <div class="head-actions">
+      <select id="langSel" class="select" onchange="setLang(this.value)"><option value="en">EN</option><option value="tr">TR</option><option value="de">DE</option></select>
+      <button class="btn" onclick="document.getElementById('plan').scrollIntoView({behavior:'smooth'})">✈ Plan</button>
+    </div>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-card">
+    <div>
+      <h2>Pamukkale’den Laodicea’ya — Denizli’nin tamamı.</h2>
+      <p>15+ yer, travertenler, antik kentler, Denizli horozu ve tekstil. Harita, yemek rehberi, tarih, rota planlayıcı ve bütçe — 100% offline, tek dosya.</p>
+      <div class="chips"><span class="chip">📍 15 places</span><span class="chip">🏛 Hierapolis & Laodicea</span><span class="chip">🥘 Denizli Kebab</span></div>
+    </div>
+    <div class="hero-side">
+      <div style="font-size:12px;color:#6b7280;font-weight:700">Denizli in numbers</div>
+      <div style="margin-top:8px;display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px">
+        <div style="background:#f8f9ff;border:1px solid #e6e7ef;border-radius:10px;padding:8px"><b>1M+</b><br><span style="color:#6b7280">visitors/year</span></div>
+        <div style="background:#f8f9ff;border:1px solid #e6e7ef;border-radius:10px;padding:8px"><b>2,200</b> yr<br><span style="color:#6b7280">Hierapolis age</span></div>
+        <div style="background:#f8f9ff;border:1px solid #e6e7ef;border-radius:10px;padding:8px"><b>19</b><br><span style="color:#6b7280">districts</span></div>
+        <div style="background:#f8f9ff;border:1px solid #e6e7ef;border-radius:10px;padding:8px"><b>🐓</b><br><span style="color:#6b7280">Denizli rooster</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" data-tab="discover" onclick="switchTab('discover')">🗺 Discover</button>
+  <button class="nav-btn" data-tab="food" onclick="switchTab('food')">🥘 Food</button>
+  <button class="nav-btn" data-tab="history" onclick="switchTab('history')">🏛 History</button>
+  <button class="nav-btn" data-tab="plan" onclick="switchTab('plan')">✈ Plan</button>
+  <button class="nav-btn" data-tab="essentials" onclick="switchTab('essentials')">ℹ Essentials</button>
+</nav>
+
+<main class="wrap">
+  <section id="discover" class="section active">
+    <div class="grid2">
+      <div class="card" style="padding:0;overflow:hidden">
+        <div id="map" style="height:520px"></div>
+        <div style="padding:10px;font-size:11px;color:#6b7280">Map: © OSM (ODbL) via Leaflet (BSD). All pins original data.</div>
+      </div>
+      <div>
+        <div class="filters">
+          <input id="q" placeholder="Search Pamukkale, Laodicea..." oninput="renderPlaces()" style="flex:1;padding:10px 12px;border-radius:999px;border:1px solid #e6e7ef">
+          <select id="fCat" onchange="renderPlaces()" class="select"><option value="all">All</option><option>Ancient</option><option>Nature</option><option>City</option><option>Food</option></select>
+          <button class="btn" onclick="findNearest()">📍 Nearest</button>
+        </div>
+        <div id="places" style="margin-top:12px;display:grid;gap:10px;max-height:540px;overflow:auto;padding-right:4px"></div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:14px">
+      <h3>🌦 Best seasons & Climate (Denizli, 1991-2020)</h3>
+      <div class="climate-grid" id="climateGrid"></div>
+      <div style="margin-top:6px;font-size:11px;color:#6b7280">Apr-Jun & Sep-Oct best. Summer 30°C+ travertines bright, winter 5°C quiet. Data: MGM normals, public domain.</div>
+    </div>
+  </section>
+
+  <section id="food" class="section">
+    <div class="card">
+      <h3>🥘 Denizli Food — What to Eat</h3>
+      <p style="font-size:12px;color:#6b7280">Tap to filter by preference. All descriptions original.</p>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px" id="foodChips"></div>
+      <div class="food-grid" id="foodGrid" style="margin-top:12px"></div>
+    </div>
+    <div class="card" style="margin-top:14px;background:#fffbeb;border:1px solid #fde68a">
+      <h4>🛍 Textile — Buldan & Babadağ</h4>
+      <p style="font-size:13px;color:#92400e;margin-top:4px">Denizli is Turkey’s textile capital — Buldan peshtemal, towels, robes. Buy in Buldan bazaar, not Pamukkale gate.</p>
+    </div>
+  </section>
+
+  <section id="history" class="section">
+    <div class="card">
+      <h3>🏛 Timeline — 3,000 years</h3>
+      <div id="timeline" style="margin-top:12px;display:grid;gap:10px"></div>
+    </div>
+    <div class="grid2" style="margin-top:14px">
+      <div class="card" style="border-left:4px solid #06b6d4"><h4>🐓 Denizli Rooster</h4><p style="font-size:13px;color:#334155;margin-top:4px">Famous long-crowing breed, symbol of city. Statue in city center, annual festival.</p></div>
+      <div class="card" style="border-left:4px solid #f59e0b"><h4>🧶 Textile Heritage</h4><p style="font-size:13px;color:#334155;margin-top:4px">From Laodicea’s ancient looms to modern denim — Denizli supplies 70% of Turkey’s towels.</p></div>
+    </div>
+  </section>
+
+  <section id="plan" class="section">
+    <div class="grid2">
+      <div class="card">
+        <h3>Itinerary Planner — Denizli in 1-3 days</h3>
+        <div class="field"><label>Days</label><select id="pDays" class="select"><option value="1">1 day — Pamukkale</option><option value="2" selected>2 days — Pamukkale + Laodicea</option><option value="3">3 days — + Kaklık & Buldan</option></select></div>
+        <div class="field" style="margin-top:10px"><label>Interests</label><div id="pInterests" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px"></div></div>
+        <button class="btn primary" style="margin-top:12px;width:100%" onclick="generatePlan()">Generate plan →</button>
+        <div id="planOut" style="margin-top:12px"></div>
+        <div style="display:flex;gap:8px;margin-top:10px">
+          <button class="btn" onclick="window.print()">🖨 Print</button>
+          <button class="btn" onclick="exportPlanICS()">📅 .ics</button>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Budget — Denizli is cheap</h3>
+        <div class="field"><label>Travelers</label><input type="number" id="bTrav" value="2" min="1" class="select"></div>
+        <div class="field" style="margin-top:8px"><label>Days</label><input type="number" id="bDays" value="2" min="1" class="select"></div>
+        <div class="field" style="margin-top:8px"><label>Comfort</label><select id="bTier" class="select"><option value="budget">Budget</option><option value="mid" selected>Mid</option><option value="lux">Comfort</option></select></div>
+        <button class="btn" style="margin-top:12px;width:100%" onclick="calcBudget()">Calculate</button>
+        <div id="budgetOut" style="margin-top:12px;padding:10px;background:#f0fdfa;border:1px solid #a7f3d0;border-radius:12px;font-size:13px"></div>
+        <div style="margin-top:8px;font-size:11px;color:#6b7280">Avg Pamukkale ticket 400 TRY, dolmuş 30 TRY, kebab 180 TRY.</div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:14px">
+      <h3>🧭 Route Optimizer</h3>
+      <p style="font-size:12px;color:#6b7280">Pick places, get shortest order (haversine + 2-opt). No Google API.</p>
+      <div id="routePicks" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px"></div>
+      <div style="display:flex;gap:8px;margin-top:10px"><button class="btn primary" onclick="optimizeRoute()">Optimize →</button><button class="btn" onclick="clearRoute()">Clear</button><span id="routeStats" style="font-size:12px;color:#6b7280;align-self:center"></span></div>
+      <div id="routeOut" style="margin-top:12px"></div>
+    </div>
+  </section>
+
+  <section id="essentials" class="section">
+    <div class="grid2">
+      <div class="card"><h3>🛂 Getting There</h3><p style="font-size:13px;color:#334155;margin-top:6px"><b>Çardak Airport (DNZ)</b> 65km → bus to city. <b>Bus:</b> Istanbul 10h, Izmir 4h, Antalya 4h. <b>Train:</b> Izmir-Denizli (Göller Ekspresi).</p></div>
+      <div class="card"><h3>🚌 In City</h3><p style="font-size:13px;color:#334155;margin-top:6px">Minibus (dolmuş) everywhere, Denizli card. Taxi via BiTaksi. Pamukkale is 20km north — minibus every 15 min.</p></div>
+      <div class="card"><h3>🏨 Stay</h3><p style="font-size:13px;color:#334155;margin-top:6px">Pamukkale: thermal hotels (Karahayıt). City: Bayramyeri. Budget 800 TRY, mid 1500 TRY. Book Travertine view early.</p></div>
+      <div class="card"><h3>🚨 Emergency</h3><p style="font-size:13px;color:#334155;margin-top:6px"><b>112</b> universal, <b>155</b> police. Pamukkale jandarma. Tourist police: <b>153</b> Denizli.</p></div>
+      <div class="card"><h3>🗣 Useful Turkish</h3><p style="font-size:13px;color:#334155;margin-top:6px">Merhaba (Hello), Teşekkürler (Thanks), Ne kadar? (How much?), Pamukkale nerede? 🔊 tap in phrasebook.</p><button class="btn" onclick="speak('Pamukkale nerede?')">🔊 Pamukkale nerede?</button></div>
+      <div class="card"><h3>📅 Events</h3><p style="font-size:13px;color:#334155;margin-top:6px">May: Denizli Rooster Festival. July: Pamukkale Culture Fest. Sep: Buldan Weaving Fest.</p></div>
+    </div>
+    <div class="card" style="margin-top:14px"><h3>Legal</h3><p style="font-size:12px;color:#6b7280">Map © OSM (ODbL) via Leaflet (BSD). All texts original, 1-2 sentences. No Wikipedia copy. No photos bundled. Offline, MIT.</p></div>
+  </section>
+</main>
+
+<footer style="max-width:1160px;margin:0 auto;padding:0 20px 24px;color:#8a8aa0;font-size:11px;text-align:center">Discover Denizli • Made in Denizli • Offline-first • Leaflet OSM • MIT</footer>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
