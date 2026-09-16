@@ -24,13 +24,18 @@ const foods=[
   {name:'Simit (Denizli)', desc:'Sesame ring, daily.', allergens:['gluten','sesame'], price:'15-25 TRY', cat:'Snack'},
 ];
 const timeline=[
-  {year:'-5500', title:'Laodicea founded', desc:'Important trade city on Lycus, textile center.'},
-  {year:'190 BC', title:'Hierapolis', desc:'Founded by Eumenes II, Roman spa city.'},
-  {year:'17 AD', title:'Earthquake', desc:'Laodicea destroyed, rebuilt by Romans.'},
-  {year:'1070', title:'Turks arrive', desc:'Seljuks, then Beyliks.'},
-  {year:'1429', title:'Ottoman', desc:'Joins Ottoman Empire.'},
-  {year:'1919', title:'Resistance', desc:'Müftü Ahmet Hulusi leads first resistance.'},
-  {year:'1988', title:'Pamukkale UNESCO', desc:'Natural & cultural World Heritage.'},
+  {year:'MÖ 5000', title:'Beycesultan Höyüğü', desc:'Çivril’de 40 katman — Denizli’nin ilk şehri, Kalkolitik’ten Tunç Çağı’na.'},
+  {year:'MÖ 261', title:'Laodicea kuruldu', desc:'Antiokhos II kurdu, yün ve bankacılıkla zengin, Lycus vadisi ticaret başkenti.'},
+  {year:'MÖ 190', title:'Hierapolis', desc:'Bergama Kralı II. Eumenes kurdu — termal şifa kenti, Apollon ve tiyatro.'},
+  {year:'MS 60', title:'Büyük Deprem', desc:'Laodicea yıkıldı, halk Roma yardımı reddedip kendi parasıyla yeniden kurdu.'},
+  {year:'MS 1070', title:'Türkler geldi', desc:'Malazgirt sonrası Selçuklular, Haçlılar Hierapolis’ten geçti.'},
+  {year:'1261', title:'Ladik (Denizli) Beyliği', desc:'Laodicea’nın Türkçesi Ladik — İncil’in Colossae’si Türklerin Denizli’si oldu.'},
+  {year:'1429', title:'Osmanlı', desc:'Sancak merkezi, dokuma hiç durmadı.'},
+  {year:'1889', title:'Demiryolu', desc:'İzmir-Denizli hattı — pamuk ve dokuma ihracatı patladı.'},
+  {year:'1919', title:'İlk Kıvılcım', desc:'15 Mayıs, Müftü Ahmet Hulusi Bayramyeri’nde cihad fetvası — Türkiye’de ilk direniş çağrısı.'},
+  {year:'1923', title:'İl oldu', desc:'Cumhuriyet’le il, 1980’lerde Anadolu Kaplanı — havlunun %70’i Denizli’den.'},
+  {year:'1988', title:'UNESCO', desc:'Hierapolis-Pamukkale doğal + kültürel çift miras, dünyada nadir.'},
+  {year:'2014', title:'Büyükşehir', desc:'Denizli Büyükşehir Belediyesi — 19 ilçe.'},
 ];
 let lang='en';
 function switchTab(id){
