@@ -11,9 +11,9 @@
 </p>
 
 <p align="center">
-  <b>Live — Latest Build (v5, dark readable):</b> <a href="https://flynntaggart26.github.io/denizli-guide/">https://flynntaggart26.github.io/denizli-guide/</a><br>
+  <b>Live — Latest Build (v6, readable + per-place audio):</b> <a href="https://flynntaggart26.github.io/denizli-guide/">https://flynntaggart26.github.io/denizli-guide/</a><br>
   <b>Official DBB Website:</b> <a href="https://www.denizli.bel.tr">https://www.denizli.bel.tr</a> — always verify hours/prices there.<br>
-  <sub>Offline-first • No tracking • No backend • <code>style.css?v=5</code> / <code>app.js?v=5</code> • Hard refresh <code>Ctrl+Shift+R</code> after update</sub>
+  <sub>Offline-first • No tracking • No backend • <code>style.css?v=6</code> / <code>app.js?v=6</code> • Hard refresh <code>Ctrl+Shift+R</code> after update</sub>
 </p>
 
 ---
@@ -76,13 +76,14 @@ Most Denizli guides are scattered PDFs, hotel brochures, or online-only blogs th
 - **UX:** Search + category filter (`Ancient/Nature/City/Food`), **dark filters** (`rgba(255,255,255,.06)`, `#f1f3ff` text — *v5 fix: no more white input on dark*), click card → `map.setView(12)` + popup, **📍 Nearest** via `navigator.geolocation` + haversine, no server.
 - **Climate:** 12-month avg temps for Denizli (MGM normals 1991–2020, public domain) — 12 bars, `8 + temp/30*28` height, month + °C labels.
 
-### 🎧 Pamukkale — Complete Audio Guide (v1.1)
+### 🎧 Audio Guide — Every Place, Both Languages (v1.2)
 
-*Not robotic.* Generated with **Python `edge-tts`** — `tr-TR-EmelNeural` (TR, 341KB) + `en-US-JennyNeural` (EN, 297KB), Microsoft Neural, offline MP3 in `audio/`.
+*Not robotic, both TR and EN.* Generated with **Python `edge-tts`** — `tr-TR-EmelNeural` + `en-US-JennyNeural` (Microsoft Neural), offline MP3s. **Every of the 15 places now has TR + EN** (30 files, 24-61KB each) + the complete Pamukkale guide (341KB/297KB) — total 32 MP3s in `audio/`.
 
-- Beautiful player at top of Discover: `🇹🇷 Türkçe / 🇬🇧 English` switch, `audio` controls, transcript collapsible. Script is **original** (travertine formation → Hierapolis → Cleopatra Pool → sunrise tip → `denizli.bel.tr`), 1 min, not Wikipedia.
-- Files: `audio/pamukkale_tr.mp3`, `audio/pamukkale_en.mp3` + `audio/generate.py` (reproducible) + `audio/*.txt`.
-- Legal: Generated audio is yours, no MP3 bundled from elsewhere, no music.
+- **Top player:** Pamukkale complete guide (1 min, original script: travertine → Hierapolis → Cleopatra Pool → sunrise tip) with `🇹🇷/🇬🇧` switch + transcript.
+- **Per-place cards:** Each card in Discover now has `🇹🇷 TR / 🇬🇧 EN` buttons + `<audio>` controls — tap to hear that place’s own 1-sentence guide in beautiful neural voice (e.g., Hierapolis, Laodicea, Kaklık...). Files: `audio/hier_tr.mp3`, `audio/lao_en.mp3`, etc. (naming = `id_lang.mp3`).
+- Generated via `audio/generate_all.py` (reproducible, original 1-sentence scripts, no Wikipedia). All audio is yours.
+- Legal: No MP3 bundled from elsewhere, no music, no robot Web Speech.
 
 ### 🥘 Food & Textile
 
@@ -112,7 +113,7 @@ Most Denizli guides are scattered PDFs, hotel brochures, or online-only blogs th
 ## Design — Travertine to Night
 
 - **Before (light travertine):** `bg #fdfcfa`, white cards — pleasant but washed out in sun.
-- **Now (Bosphorus Nights, v5):** `bg #070b1a` deep navy, cards `rgba(255,255,255,.05–.07)` glass, **place cards now readable** (`#fff` title 14px 800, `#e2e8f0` desc, gradient badges `#f59e0b→#e11d48` white text, `rgba(255,255,255,.14)` border, `box-shadow` + `backdrop-filter: blur`), filters `rgba(255,255,255,.06)` dark, hero stats white on teal/brown gradient. **No flat white left.**
+- **Now (Bosphorus Nights, v6):** `bg #070b1a` deep navy, cards **solid dark `#1e293b`** (not translucent white) + `border #334155`, **place cards now fully readable** (`#f8fafc` title 15px 800, `#e2e8f0` desc 13px 600, `#94a3b8` tip, gradient badges white text, `box-shadow` 0 6px 16px), filters `rgba(255,255,255,.06)` dark, hero stats white teal/brown, **per-place audio buttons** visible. **No flat white left (v5→v6 fix).**
 - **Typography:** Fraunces 700 for headings, Inter 500/600/700 for UI, 1.65 line-height.
 - **Map:** `0.9 saturate, 0.95 brightness` to match night.
 
@@ -135,23 +136,22 @@ Most Denizli guides are scattered PDFs, hotel brochures, or online-only blogs th
 
 ```
 denizli-guide/
-├── index.html   # v5 cache bust, header DBB button, audio guide at top, dark filters
-├── style.css    # Bosphorus Nights dark (070b1a), glass cards, readable place cards — all whites fixed
-├── app.js       # debugged (duplicate timeline), dark place cards, audio switchAudio(), route, climate
+├── index.html   # v6 cache bust, header DBB, audio guide top + per-place TR/EN players, dark filters
+├── style.css    # Bosphorus Nights dark (070b1a), solid dark cards #1e293b — readable
+├── app.js       # dark place cards + playPlace(id,lang) for all 15, switchAudio(), route, climate
 ├── audio/
-│   ├── pamukkale_tr.mp3  # 341KB, EmelNeural
-│   ├── pamukkale_en.mp3  # 297KB, JennyNeural
-│   ├── pamukkale_tr.txt  # original script
-│   ├── pamukkale_en.txt
-│   └── generate.py       # edge-tts reproducible
-└── README.md    # this file (v5)
+│   ├── pamukkale_tr.mp3 / pamukkale_en.mp3  # complete guide (341/297KB)
+│   ├── pam_tr.mp3 / pam_en.mp3, hier_tr.mp3 ... bek_tr.mp3  # per-place 1-sentence (24-61KB ×30)
+│   ├── generate.py / generate_all.py        # edge-tts reproducible (Emel/Jenny Neural)
+│   └── *_tr.txt / *_en.txt                  # original scripts
+└── README.md    # this file (v6)
 ```
 
 ---
 
 ## 📄 Actual `index.html` (Live File)
 
-This is the **actual `index.html`** deployed to Pages (v5, 174 lines, `style.css?v=5` / `app.js?v=5`). No separate build — what you see on GitHub is what runs live.
+This is the **actual `index.html`** deployed to Pages (v6, ~180 lines, `style.css?v=6` / `app.js?v=6`). No separate build — what you see on GitHub is what runs live.
 
 - **View on GitHub:** [https://github.com/Flynntaggart26/denizli-guide/blob/main/index.html](https://github.com/Flynntaggart26/denizli-guide/blob/main/index.html)
 - **Raw:** `https://raw.githubusercontent.com/Flynntaggart26/denizli-guide/main/index.html`
@@ -168,7 +168,7 @@ This is the **actual `index.html`** deployed to Pages (v5, 174 lines, `style.css
 <title>Discover Denizli — Complete Guide</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700&family=Inter:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-<link rel="stylesheet" href="style.css?v=5">
+<link rel="stylesheet" href="style.css?v=6">
 </head>
 <body>
 <header class="header">
@@ -225,5 +225,5 @@ Live: **https://flynntaggart26.github.io/denizli-guide/** (GitHub Pages, `main` 
 
 Built with ❤️ in Denizli — for tourists and for locals who want to show their city.
 
-*Last update: September 2026 — v5, audio + readable dark cards.*
+*Last update: September 2026 — v6, per-place TR/EN audio for all 15 + readable dark cards.*
 
