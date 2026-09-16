@@ -13,6 +13,7 @@
 ### 🗺 Discover — 15 Places & Map
 - **Map:** Leaflet + OSM (ODbL) — 15 pins: Pamukkale, Hierapolis, Laodicea, Kaklık Cave, Honaz, Karahayıt, Buldan, Sarayköy, Işıklı Lake, Teleferik, Forum Çamlık, Tripolis, Ağlayan Kaya, Güney Falls, Bekilli
 - Search + category filter, click → fly to pin, **📍 Nearest** via geolocation + haversine
+- **🎧 Pamukkale Audio Guide — Complete (NEW):** Natural neural voices, not robotic — **TR `tr-TR-EmelNeural` + EN `en-US-JennyNeural`** via Python `edge-tts` (Microsoft Neural), generated offline as `audio/pamukkale_tr.mp3` (341KB) + `pamukkale_en.mp3` (297KB) from original script. Beautiful player with TR/EN switch, transcript, `audio` controls. Script: travertine formation → Hierapolis → Cleopatra Pool → sunrise tip → `denizli.bel.tr`.
 - **Climate:** 12-month avg temps for Denizli (MGM normals, public domain) — bar chart
 
 ### 🥘 Food

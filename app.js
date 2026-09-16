@@ -157,13 +157,33 @@ function renderClimate(){
     grid.appendChild(div);
   });
 }
+const transcripts={
+  tr: `Merhaba, Pamukkale'ye hoş geldiniz. Burası sadece bir doğa harikası değil, iki bin yıllık bir antik kentin kalbi. Beyaz travertenler, yeraltından gelen termal suların kalsiyumu bırakmasıyla oluştu. Her gün binlerce litre su, yamaçtan süzülerek bu pamuk kaleyi yaratıyor. Travertenlerde yalınayak yürüyün, suyun sıcaklığı otuz beş derece. Yukarıda, Hierapolis antik kenti sizi bekliyor. Roma döneminde şifa merkeziydi. Tiyatrosu, nekropolü ve Apollon tapınağı hala ayakta. Cleopatra Havuzu'nda, antik sütunlar arasında yüzebilirsiniz. Suyun içindeki sütunlar, bir depremle yıkılan bir yapının kalıntıları. İpucu: Gün doğumunda gelin, kalabalık yok, ışık travertenlerde altın gibi parlıyor.`,
+  en: `Welcome to Pamukkale — Cotton Castle. These white terraces are not snow, but calcium left by thermal waters flowing for thousands of years. Every day, hot springs carry minerals down the slope, building this natural castle. Walk barefoot — the water is 35 degrees, warm year-round. Above the terraces lies Hierapolis, a Roman spa city. Its theatre, necropolis and Apollo temple still stand. Swim in Cleopatra's Pool among fallen ancient columns — they collapsed in an earthquake centuries ago. Tip: Come at sunrise. No crowds, the travertines glow gold. For official hours and prices, check denizli.bel.tr. Enjoy Pamukkale, and please leave no trace.`
+};
+function switchAudio(lang){
+  const audio=document.getElementById('audioPlayer');
+  const trans=document.getElementById('transcript');
+  const btnTr=document.getElementById('btnTr'), btnEn=document.getElementById('btnEn');
+  if(!audio) return;
+  const src= lang==='tr' ? 'audio/pamukkale_tr.mp3' : 'audio/pamukkale_en.mp3';
+  audio.src=src;
+  audio.load();
+  if(trans) trans.textContent=transcripts[lang];
+  if(btnTr&&btnEn){
+    btnTr.classList.toggle('active', lang==='tr');
+    btnEn.classList.toggle('active', lang==='en');
+  }
+}
 document.addEventListener('DOMContentLoaded',()=>{
+  // audio default
+  setTimeout(()=> switchAudio('tr'), 300);
   initMap(); renderPlaces(); renderFood(); renderTimeline(); renderClimate(); renderRoutePicks();
   ['history','nature','beach','food','balloon'].forEach(i=>{
     const el=document.getElementById('pInterests');
     if(el){
       const label=document.createElement('label');
-      label.style.cssText='font-size:12px;display:flex;gap:4px;align-items:center;background:white;border:1px solid #f0e6d9;padding:6px 10px;border-radius:999px;cursor:pointer';
+      label.style.cssText='font-size:12px;display:flex;gap:4px;align-items:center;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.10);padding:6px 10px;border-radius:999px;cursor:pointer;color:#f1f3ff';
       label.innerHTML=`<input type="checkbox" value="${i}"> ${i}`;
       el.appendChild(label);
     }
