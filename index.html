@@ -7,7 +7,7 @@
 <meta name="description" content="Complete offline guide for Denizli, Türkiye: Pamukkale & Hierapolis, Laodicea, Kaklik Cave, local food, map, itineraries & tips. Official DBB link included.">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700&family=Inter:wght@500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-<link rel="stylesheet" href="style.css?v=6">
+<link rel="stylesheet" href="style.css?v=7">
 </head>
 <body>
 <header class="header">
@@ -100,14 +100,26 @@
 
   <section id="food" class="section">
     <div class="card">
-      <h3>🥘 Denizli Food — What to Eat</h3>
-      <p style="font-size:12px;color:#6b7280">Tap to filter by preference. All descriptions original.</p>
-      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px" id="foodChips"></div>
+      <h3>🥘 Denizli’ye Özel Lezzetler & Tavsiye Ürünler</h3>
+      <p style="font-size:12px;color:#cbd5e1">Denizli’nin tescilli tatları — her birinde <b>alerjen</b> ve fiyat bilgisi + alerji sahipleri için uyarı. Filtrele, sonra garsona göster.</p>
+      <div style="margin-top:10px;padding:10px;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.18);border-radius:12px">
+        <b style="font-size:12px;color:#f59e0b">⚠️ Alerji sahipleri için genel uyarı:</b>
+        <ul style="margin:6px 0 0 18px;font-size:11px;color:#cbd5e1">
+          <li><b>Fındık/ceviz (nuts):</b> Eser miktarda bulaşma riski — “kesinlikle yok” deyin.</li>
+          <li><b>Gluten (buğday):</b> Çölyak için uygun değil — cross-contact riski.</li>
+          <li><b>Süt (dairy):</b> Yoğurt/tereyağı içerir — laktoz intoleransı dikkat.</li>
+          <li><b>Yumurta/Susam/Sülfit/Alkol:</b> Etiketi sorun, hamileler ve çocuklar için alkol/sülfitten kaçının.</li>
+        </ul>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:12px" id="foodChips"></div>
       <div class="food-grid" id="foodGrid" style="margin-top:12px"></div>
+      <div style="margin-top:14px;padding:10px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;font-size:11px;color:#9aa0c2">💡 <b>Garsona göster:</b> Alerjen filtresi seçince altta “Alerjim var” kartı otomatik oluşur — TR+EN, tek tıkla yazdır.</div>
+      <div id="allergyCard" style="margin-top:8px;padding:10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.10);border-radius:10px;font-size:13px;color:#f1f3ff">Alerjen seçince kart burada oluşur.</div>
     </div>
-    <div class="card" style="margin-top:14px;background:#fffbeb;border:1px solid #fde68a">
-      <h4>🛍 Textile — Buldan & Babadağ</h4>
-      <p style="font-size:13px;color:#92400e;margin-top:4px">Denizli is Turkey’s textile capital — Buldan peshtemal, towels, robes. Buy in Buldan bazaar, not Pamukkale gate. See <a href="https://www.denizli.bel.tr/kultur-sanat" target="_blank">DBB Culture</a>.</p>
+    <div class="card" style="margin-top:14px">
+      <h3>🛍 Tavsiye Edilen Ürünler — Denizli’den Götürmelik</h3>
+      <div id="productGrid" style="margin-top:10px;display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px"></div>
+      <p style="font-size:11px;color:#9aa0c2;margin-top:8px">Hepsi Denizli’ye özgü, orijinal açıklamalı — fotoğraf paketlenmedi, yerel esnaftan alın.</p>
     </div>
   </section>
 
@@ -203,6 +215,6 @@
 
 <footer style="max-width:1160px;margin:0 auto;padding:0 20px 24px;color:#8a8aa0;font-size:11px;text-align:center">Discover Denizli • Made in Denizli • <a href="https://www.denizli.bel.tr" target="_blank">denizli.bel.tr</a> • Offline-first • MIT</footer>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="app.js?v=6"></script>
+<script src="app.js?v=7"></script>
 </body>
 </html>

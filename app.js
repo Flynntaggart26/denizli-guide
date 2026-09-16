@@ -16,12 +16,25 @@ const places=[
   {id:'bek', name:'Bekilli Vineyards', cat:'Food', lat:38.2300, lon:29.4200, desc:'Wine route, Shiraz and Boğazkere.', tip:'Autumn harvest.'},
 ];
 const foods=[
-  {name:'Denizli Kebab', desc:'Wood-fired tandir lamb, city specialty.', allergens:['meat'], price:'180-280 TRY', cat:'Meat'},
-  {name:'Keşkek', desc:'Wheat and meat pounded for hours, wedding dish.', allergens:['gluten','meat'], price:'80-120 TRY', cat:'Meat'},
-  {name:'Arap Aşı', desc:'Spicy chicken soup with dough, winter.', allergens:['gluten','meat'], price:'60-90 TRY', cat:'Soup'},
-  {name:'Buldan Cookie', desc:'Walnut cookie, textile town sweet.', allergens:['nuts','gluten','dairy'], price:'40-60 TRY', cat:'Sweet'},
-  {name:'Çal Vineyard Wine', desc:'Local Shiraz, Chateau-like.', allergens:[], price:'200-400 TRY', cat:'Drink'},
-  {name:'Simit (Denizli)', desc:'Sesame ring, daily.', allergens:['gluten','sesame'], price:'15-25 TRY', cat:'Snack'},
+  {name:'Denizli Tandır Kebabı', desc:'Kuzunun tandırda 6 saat odun ateşinde pişmesi — Denizli’nin en meşhur yemeği. Bayramyeri ve Kaleiçi’nde her lokantada var.', allergens:['meat'], price:'220-320 TRY', cat:'Kebab', note:'Vejetaryen/vegan için uygun değil. Et alerjisi olanlar kaçınmalı.'},
+  {name:'Denizli Keşkeği', desc:'Düğünlerin baş tacı — buğday ve etin saatlerce dövülmesiyle yapılır, üzerine kızarmış tereyağı ve biber.', allergens:['gluten','dairy','meat'], price:'90-130 TRY', cat:'Pilav', note:'Gluten (buğday) ve süt ürünleri içerir — çölyak ve laktoz intoleransı olanlar için uygun değil.'},
+  {name:'Arap Aşı / Çaput Aşı', desc:'Kışın iç ısıtan Tavaz yemeği — tavuk suyu, hamur ve bol acı biber.', allergens:['gluten','meat','egg'], price:'70-100 TRY', cat:'Çorba', note:'Yumurta ve gluten içerir — yumurta alerjisi ve çölyak dikkat.'},
+  {name:'Kale Biber Tavası', desc:'Kale’nin coğrafi işaretli tatlı-acı biberi, domates ve etle tavada.', allergens:['meat'], price:'80-110 TRY', cat:'Sebze', note:'Acı hassasiyeti olanlar için orta acılı isteyin. Vejetaryen versiyonu istenebilir.'},
+  {name:'Honaz Kirazı', desc:'Haziran’da Honaz ovasından — iri, sulu, dünyaca ünlü. Mevsiminde tezgahlar dolup taşar.', allergens:[], price:'60-100 TRY/kg', cat:'Meyve', note:'Meyve alerjisi nadir ama polen alerjisi olanlar dikkat — taze ve yıkanmış tüketin.'},
+  {name:'Acıpayam Kavunu', desc:'Temmuz-Ağustos’un tatlı kavunu, Acıpayam ovasından. Kokusu kesilmeden anlaşılır.', allergens:[], price:'30-50 TRY', cat:'Meyve', note:'Kavun alerjisi (lateks çapraz) olanlar dikkatli olmalı.'},
+  {name:'Buldan Cevizli Sucuk & Kurabiye', desc:'Ceviz ve üzüm pekmezinin buluşması — Buldan’ın kış tatlısı.', allergens:['nuts','gluten','dairy'], price:'50-80 TRY', cat:'Tatlı', note:'Ceviz/fındık alerjisi olanlar kesinlikle tüketmemeli — eser miktarda fındık bulaşması olabilir.'},
+  {name:'Çal Karası & Şarabı', desc:'Denizli’ye özgü üzüm — Shiraz ve Boğazkere ile karıştırılır, Çal bağlarında tadım.', allergens:['sulfite','alcohol'], price:'250-450 TRY/şişe', cat:'İçecek', note:'Sülfit ve alkol içerir — alkol hassasiyeti ve hamileler için uygun değil. 18+.'},
+  {name:'Babadağ Kestanesi', desc:'Sonbaharda kavrulmuş kestane, Honaz ve Babadağ ormanlarından.', allergens:['nuts'], price:'80-120 TRY/kg', cat:'Kuruyemiş', note:'Kestane, fındık ailesi — kuruyemiş alerjisi olanlar dikkat.'},
+  {name:'Tavas Baklavası', desc:'Kat kat yufka, taze tereyağı ve cevizle Denizli usulü.', allergens:['nuts','gluten','dairy'], price:'300-450 TRY/kg', cat:'Tatlı', note:'Gluten, süt ve ceviz içerir — üç alerjen bir arada, etiket okuyun.'},
+  {name:'Denizli Simidi', desc:'Sokak simidi, susamlı ve gevrek — sabah çayı ile.', allergens:['gluten','sesame'], price:'15-25 TRY', cat:'Atıştırmalık', note:'Susam ve gluten içerir — susam alerjisi olanlar için riskli.'},
+  {name:'Yenice Yoğurdu', desc:'Yenicekent’in manda yoğurdu, kaymaklı.', allergens:['dairy'], price:'60-90 TRY/kg', cat:'Süt', note:'Süt alerjisi ve laktoz intoleransı olanlar için uygun değil.'},
+];
+const recommendedProducts=[
+  {name:'Buldan Peştemali', desc:'El tezgahında dokunan, %100 pamuk — hamam ve plaj için. UNESCO adayı zanaat.', price:'150-400 TRY', tip:'Buldan çarşısından alın, Pamukkale kapısından değil — %30 ucuz, orijinal.'},
+  {name:'Denizli Havlusu & Bornoz', desc:'Dünya havlusunun %70’i Denizli’den — Babadağ ve Organize Sanayi. Pamuk, bambu, hızlı kuruyan.', price:'200-600 TRY', tip:'Havlu dokuma atölyesini ziyaret edin, etiketinde “Buldan” arayın.'},
+  {name:'Kale Biberi (Kurutulmuş)', desc:'Coğrafi işaretli, tatlı-acı dengeli — mutfağa götürmelik hediye.', price:'80-150 TRY/kg', tip:'Vakumlu pakette alın, gümrükte sorun yok.'},
+  {name:'Honaz Kiraz Kolonyası', desc:'Kiraz çiçeği esanslı kolonya — Denizli’nin kokusu.', price:'40-70 TRY', tip:'Hediyelik, sıvı olduğu için uçakta bagaja verin.'},
+  {name:'Çal Şarabı (Şişe)', desc:'Çal Karası üzümünden — yerel üretici, butik şaraphane. Gümrüklü götürülebilir.', price:'250-450 TRY', tip:'Şaraphane tadımı ücretsiz, kargo ile de gönderilir.'},
 ];
 const timeline=[
   {year:'MÖ 5000', title:'Beycesultan Höyüğü', desc:'Çivril’de 40 katman — Denizli’nin ilk şehri, Kalkolitik’ten Tunç Çağı’na.'},
@@ -44,6 +57,7 @@ function switchTab(id){
   document.getElementById(id).classList.add('active');
   document.querySelector(`[data-tab="${id}"]`).classList.add('active');
   if(id==='discover') setTimeout(()=> map.invalidateSize(), 120);
+  if(id==='food'){ renderFood(); renderProducts(); }
 }
 function setLang(v){ lang=v; renderPlaces(); }
 let map;
@@ -96,20 +110,51 @@ function renderFood(){
   const cats=[...new Set(foods.map(f=>f.cat))];
   chips.innerHTML=''; cats.forEach(c=>{
     const b=document.createElement('button');
-    b.textContent=c; b.style.cssText='padding:6px 10px;border-radius:999px;border:1px solid #f0e6d9;background:white;color:#7a819c;font-weight:700;font-size:12px;cursor:pointer';
-    b.onclick=()=>{ b.classList.toggle('active'); renderFoodFiltered(); };
+    b.textContent=c; b.style.cssText='padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:#9aa0c2;font-weight:700;font-size:12px;cursor:pointer';
+    b.onclick=()=>{ b.classList.toggle('active'); if(b.classList.contains('active')){ b.style.background='linear-gradient(135deg,#0e7490,#06b6d4)'; b.style.color='white'; b.style.borderColor='transparent'; } else { b.style.background='rgba(255,255,255,.06)'; b.style.color='#9aa0c2'; b.style.borderColor='rgba(255,255,255,.12)'; } renderFoodFiltered(); updateAllergyCard(); };
     chips.appendChild(b);
   });
   renderFoodFiltered();
+  renderProducts();
+  updateAllergyCard();
 }
 function renderFoodFiltered(){
   const active=[...document.querySelectorAll('#foodChips .active')].map(b=>b.textContent);
   const grid=document.getElementById('foodGrid'); grid.innerHTML='';
   foods.filter(f=> active.length===0 || active.includes(f.cat)).forEach(f=>{
     const div=document.createElement('div'); div.className='food-card';
-    div.innerHTML=`<b>${f.name}</b><div style="font-size:12px;color:#4b5563">${f.desc}</div><div style="font-size:11px;color:#7a819c">${f.allergens.length? '⚠️ '+f.allergens.join(', '):'✅ No allergens'} • ${f.price}</div>`;
+    div.style.cssText='border:1px solid rgba(255,255,255,.10);border-radius:14px;padding:14px;background:rgba(255,255,255,.05);backdrop-filter:blur(6px)';
+    div.innerHTML=`<b style="color:#f1f3ff">${f.name}</b> <span style="font-size:10px;padding:2px 6px;border-radius:999px;background:rgba(255,255,255,.08);color:#9aa0c2">${f.cat}</span><div style="font-size:12.5px;color:#cbd5e1;margin-top:4px">${f.desc}</div><div style="font-size:11px;color:#f59e0b;margin-top:6px;font-weight:700">${f.allergens.length? '⚠️ '+f.allergens.join(', '):'✅ No allergens'} • ${f.price}</div><div style="font-size:11px;color:#fde68a;margin-top:6px;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.14);border-radius:8px;padding:6px"><b>Alerji notu:</b> ${f.note}</div>`;
     grid.appendChild(div);
   });
+}
+function renderProducts(){
+  const grid=document.getElementById('productGrid');
+  if(!grid) return;
+  grid.innerHTML='';
+  recommendedProducts.forEach(p=>{
+    const div=document.createElement('div');
+    div.style.cssText='background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:14px';
+    div.innerHTML=`<b style="color:#f1f3ff">${p.name}</b><div style="font-size:12.5px;color:#cbd5e1;margin-top:4px">${p.desc}</div><div style="font-size:11px;color:#06b6d4;font-weight:700;margin-top:6px">${p.price}</div><div style="font-size:11px;color:#fde68a;margin-top:4px">💡 ${p.tip}</div>`;
+    grid.appendChild(div);
+  });
+}
+function updateAllergyCard(){
+  const card=document.getElementById('allergyCard');
+  if(!card) return;
+  const active=[...document.querySelectorAll('#foodChips .active')].map(b=>b.textContent);
+  if(!active.length){
+    card.innerHTML='Alerjen seçince kart burada oluşur — filtre ile kategoriye göre daraltın, kartı garsona gösterin.';
+    card.style.color='#f1f3ff';
+    return;
+  }
+  const foodsInView=foods.filter(f=> active.includes(f.cat));
+  const allAllergens=[...new Set(foodsInView.flatMap(f=>f.allergens))];
+  if(!allAllergens.length){
+    card.innerHTML='<b style="color:#6ee7b7">✅ Seçili kategoride alerjen yok.</b> Yine de çapraz bulaşma için sorun.';
+    return;
+  }
+  card.innerHTML=`<b style="color:#fde68a">⚠️ Alerjim var:</b> ${allAllergens.join(', ')}<br><span style="font-size:12px">Lütfen yemeğimde <b>${allAllergens.join(', ')}</b> olmasın. Teşekkürler!</span><br><span style="font-size:11px;color:#9aa0c2">I have allergy to ${allAllergens.join(', ')} — please no ${allAllergens.join(', ')}.</span>`;
 }
 let lastPlan=null;
 function generatePlan(){
