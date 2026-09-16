@@ -141,17 +141,8 @@ function exportPlanICS(){
 }
 function renderTimeline(){
   const el=document.getElementById('timeline'); if(!el) return;
-  el.innerHTML=timeline.map(t=>`<div style="display:flex;gap:12px;padding:10px;background:white;border:1px solid #f0e6d9;border-radius:12px"><b style="min-width:70px;color:#0e7490">${t.year}</b><div><b>${t.title}</b><div style="font-size:12px;color:#4b5563">${t.desc}</div></div></div>`).join('');
+  el.innerHTML=timeline.map(t=>`<div style="display:flex;gap:12px;padding:10px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10);border-radius:12px;backdrop-filter:blur(6px)"><b style="min-width:70px;color:#06b6d4">${t.year}</b><div><b style="color:#f1f3ff">${t.title}</b><div style="font-size:12px;color:#9aa0c2">${t.desc}</div></div></div>`).join('');
 }
-const timeline=[
-  {year:'-5000', title:'Laodicea founded', desc:'Trade city on Lycus, textile center.'},
-  {year:'190 BC', title:'Hierapolis', desc:'Founded by Eumenes II, Roman spa city.'},
-  {year:'17 AD', title:'Earthquake', desc:'Laodicea destroyed, rebuilt.'},
-  {year:'1070', title:'Turks arrive', desc:'Seljuks, then Beyliks.'},
-  {year:'1429', title:'Ottoman', desc:'Joins Ottoman Empire.'},
-  {year:'1919', title:'Resistance', desc:'Müftü Ahmet Hulusi leads first resistance.'},
-  {year:'1988', title:'UNESCO', desc:'Hierapolis-Pamukkale World Heritage.'},
-];
 const climate=[6,7,10,15,20,24,27,27,23,17,12,8];
 function renderClimate(){
   const grid=document.getElementById('climateGrid'); if(!grid) return;
