@@ -1,6 +1,6 @@
-# Discover Denizli — Complete Offline Guide
+# Discover Denizli — Complete Offline Travel Guide
 
-> **The complete companion for Denizli, Türkiye** — 26 curated places from Pamukkale’s travertines to Laodicea, monuments and statues, with interactive map, food guide, 5,500-year history, itinerary planner, route optimizer, climate, and a **natural-voice Pamukkale audio guide**. Built for tourists and locals, works 100% offline after first load.
+> **The complete companion for Denizli, Türkiye** — 26 curated places from Pamukkale's travertines to Laodicea, monuments and statues, with interactive map, TR/EN neural audio guides, bus routes, mini tips, food guide, 5,500-year history, smart itinerary planner, budget calculator with CSV export, route optimizer with travel modes, packing checklist, and shareable plans. Built for tourists and locals, works 100% offline after first load.
 
 <p align="center">
   <a href="https://flynntaggart26.github.io/denizli-guide/"><img src="https://img.shields.io/badge/Live%20Demo-Visit%20Guide-0e7490?style=for-the-badge&logo=github&logoColor=white" alt="Live"></a>
@@ -11,9 +11,9 @@
 </p>
 
 <p align="center">
-  <b>Live — Latest Build (v8, 26 places + monuments, zoom + buses + tips + full TR/EN audio):</b> <a href="https://flynntaggart26.github.io/denizli-guide/">https://flynntaggart26.github.io/denizli-guide/</a><br>
+  <b>Live — Latest Build (v9, smart planner + budget CSV + route modes + packing + shareable URLs):</b> <a href="https://flynntaggart26.github.io/denizli-guide/">https://flynntaggart26.github.io/denizli-guide/</a><br>
   <b>Official DBB Website:</b> <a href="https://www.denizli.bel.tr">https://www.denizli.bel.tr</a> — always verify hours/prices there.<br>
-  <sub>Offline-first • No tracking • No backend • <code>style.css?v=8</code> / <code>app.js?v=8</code> • Hard refresh <code>Ctrl+Shift+R</code> after update</sub>
+  <sub>Offline-first • No tracking • No backend • <code>style.css?v=9</code> / <code>app.js?v=9</code> • Hard refresh <code>Ctrl+Shift+R</code> after update</sub>
 </p>
 
 ---
@@ -23,7 +23,7 @@
 - [Why This Guide Exists](#why-this-guide-exists)
 - [Live Demo](#live-demo)
 - [Features](#features)
-- [Design — Travertine to Night](#design--travertine-to-night)
+- [Design — Bosphorus Nights](#design--bosphorus-nights)
 - [Tech Stack](#tech-stack)
 - [Project Structure](#project-structure)
 - [Getting Started](#getting-started)
@@ -36,17 +36,18 @@
 
 ## Why This Guide Exists
 
-Most Denizli guides are scattered PDFs, hotel brochures, or online-only blogs that fail in Pamukkale without signal. **Discover Denizli** puts everything in one offline file: the travertines you walk barefoot, the Hierapolis theatre above them, the red springs of Karahayıt, the looms of Buldan, and the rooster that crows 30 seconds straight. Curated for a first-time visitor and for someone who lives in Denizli — with the municipality as the source of truth.
+Most Denizli guides are scattered PDFs, hotel brochures, or online-only blogs that fail in Pamukkale without signal. **Discover Denizli** puts everything in one offline file: the travertines you walk barefoot, the Hierapolis theatre above them, the red springs of Karahayıt, the looms of Buldan, the rooster that crows 30 seconds straight, and the square where the War of Independence sparked. Curated for a first-time visitor and for someone who lives in Denizli — with the municipality (DBB) as the source of truth.
 
 ---
 
 ## Live Demo
 
-| Discover (Map + Audio at top) | Places — Now Readable | Food & History |
-|---|---|---|
-| Audio guide visible without scroll, map 520px, dark filters | Dark glass cards, white title #fff, #e2e8f0 desc, gradient badges | 6 dishes + timeline + rooster |
+**Open:** https://flynntaggart26.github.io/denizli-guide/
 
-**Open:** https://flynntaggart26.github.io/denizli-guide/ → *Tap 🎧 to hear Pamukkale, then 📍 Nearest, then Plan a 2-day route.*
+- Tap 🎧 to hear Pamukkale's complete guide in Turkish or English
+- Click any place card → map flies to it (zoom 13), popup opens, detail panel shows buses, tips, activities, and per-place audio
+- Switch to **Plan** tab → generate a smart itinerary, calculate budget in TRY/USD/EUR, optimize a route with travel modes, get a packing list, share a URL
+- Works on mobile, desktop, and — after first load — completely offline
 
 ---
 
@@ -84,17 +85,12 @@ Most Denizli guides are scattered PDFs, hotel brochures, or online-only blogs th
 | 26 | Bekilli Vineyards | Food | Shiraz, Boğazkere |
 
 - **Map:** Leaflet 1.9.4 (BSD 2-Clause) + OSM tiles (© OSM, ODbL) — 26 pins with original 1–2 sentence descriptions. No Google API, no key.
-- **UX:** Search + category filter (`Ancient / Nature / City / Monument / Food`), click card or map pin → **smooth zoom to level 13 + popup**, selected card highlighted, detail panel opens with **all Denizli bus numbers**, **mini tüyo box**, activities, and **per-place TR/EN audio**. **📍 Nearest** flies to the closest place via `navigator.geolocation` + haversine, no server. Category badges color-coded (Ancient purple, Nature green, City blue, Monument amber, Food red).
-- **Climate:** 12-month avg temps for Denizli (MGM normals 1991–2020, public domain) — 12 bars, `8 + temp/30*28` height, month + °C labels.
+- **UX:** Search + category filter (`Ancient / Nature / City / Monument / Food`), click card or map pin → **smooth flyTo zoom 13 + popup**, selected card highlighted with teal border, detail panel opens with **all Denizli bus numbers**, **mini tüyo box**, activities, and **per-place TR/EN audio**. **📍 Nearest** flies to the closest place via `navigator.geolocation` + haversine, no server. Category badges color-coded (Ancient purple, Nature green, City blue, Monument amber, Food red).
+- **Climate:** 12-month avg temps for Denizli (MGM normals 1991–2020, public domain) — 12 bars, month + °C labels.
 
-### 🎧 Audio Guide — Every Place, Both Languages (v8)
+### 🎧 Audio Guide — Every Place, Both Languages (v9)
 
 *Not robotic, both TR and EN.* Generated with **Python `edge-tts`** — `tr-TR-EmelNeural` + `en-US-JennyNeural` (Microsoft Neural), offline MP3s. **All 26 places now have TR + EN** (52 files, 24-61KB each) + the complete Pamukkale guide (341KB/297KB) — total 54 MP3s in `audio/`. Each card has its own `🇹🇷 TR dinle / 🇬🇧 EN listen` buttons + player, and the detail panel auto-loads that place's TR guide. Reproducible via `audio/generate_all.py` + `audio/generate_v7.py`.
-
-- **Top player:** Pamukkale complete guide (1 min, original script: travertine → Hierapolis → Cleopatra Pool → sunrise tip) with `🇹🇷/🇬🇧` switch + transcript.
-- **Per-place cards:** Each card in Discover now has `🇹🇷 TR / 🇬🇧 EN` buttons + `<audio>` controls — tap to hear that place’s own 1-sentence guide in beautiful neural voice (e.g., Hierapolis, Laodicea, Kaklık...). Files: `audio/hier_tr.mp3`, `audio/lao_en.mp3`, etc. (naming = `id_lang.mp3`).
-- Generated via `audio/generate_all.py` (reproducible, original 1-sentence scripts, no Wikipedia). All audio is yours.
-- Legal: No MP3 bundled from elsewhere, no music, no robot Web Speech.
 
 ### 🥘 Food & Textile
 
@@ -104,30 +100,55 @@ Most Denizli guides are scattered PDFs, hotel brochures, or online-only blogs th
 
 ### 🏛 History — 5,500 Years
 
-- Timeline: `5500 BC Laodicea → 190 BC Hierapolis → 17 AD Earthquake → 1070 Turks → 1429 Ottoman → 1919 Resistance (Müftü Ahmet Hulusi) → 1988 UNESCO`.
-- Cards: **Rooster** (long-crowing breed, city symbol) + **Textile** (Laodicea looms → 70% of Turkey’s towels).
+- Timeline: `5500 BC Beycesultan → 261 BC Laodicea → 190 BC Hierapolis → 17 AD Earthquake → 1070 Turks → 1261 Ladik Beyliği → 1429 Ottoman → 1919 Resistance (Müftü Ahmet Hulusi) → 1988 UNESCO → 2014 Metropolitan`.
+- Cards: **Rooster** (long-crowing breed, city symbol) + **Textile** (Laodicea looms → 70% of Turkey's towels).
 
-### ✈ Plan — Itinerary, Budget & Route
+### 🗓 Itinerary Planner — Smart & Shareable
 
-- **Itinerary:** 1/2/3-day templates, interests (history/nature/beach/food/balloon) → picks route, **Print** + **.ics** calendar (`BEGIN:VCALENDAR` with `VEVENT`s).
-- **Budget:** travelers × days × tier (budget 600 / mid 1100 / lux 1900 TRY, avg of Pamukkale ticket 400, dolmuş 30, kebab 180).
-- **Route Optimizer:** Select places → **nearest-neighbor + 2-opt** over haversine, total km, `L.polyline` on map + `fitBounds()`. Original algorithm, no Directions API.
+- **Days:** 1–5, **Pace:** Relaxed (2-3/day) / Balanced (3-4/day) / Packed (5+/day)
+- **Focus filters:** Multi-select Ancient / Nature / City / Monument / Food
+- **Start from:** Denizli Center / Pamukkale / Çardak Airport / Custom
+- **🪄 Generate Smart Plan** → day-by-day timeline with stop count, km, travel minutes, per-stop duration estimates
+- **🎲 Surprise Me** → randomized plan
+- **Export:** 🖨 Print / 📅 .ics Calendar / 📋 Copy as Text / 🔗 **Shareable URL** (encodes plan, days, pace, focus in `?plan=...` — recipient loads exact same plan)
 
-### ℹ Essentials — Official DBB Links
+### 💰 Budget Calculator — Categories + Currency + CSV
 
-- Getting there: Çardak Airport (DNZ) 65km, bus, train → [DBB Transport](https://www.denizli.bel.tr/ulasim)
-- In city: dolmuş, BiTaksi, Pamukkale 20km, stay (Karahayıt thermal, Bayramyeri), emergency 112/155, useful Turkish, events → [DBB Events](https://www.denizli.bel.tr/etkinlikler)
-- Hotels & culture → [DBB Culture](https://www.denizli.bel.tr/kultur-sanat)
-- Legal: Map © OSM (ODbL) via Leaflet (BSD). All texts original, no Wikipedia copy. No photos bundled — use your own. Offline, MIT.
+- 4 categories: Stay / Food / Transport / Tickets
+- 3 styles: 💸 Budget / ⚖️ Mid / 💎 Comfort (per-day TRY rates)
+- **Currency:** TRY / USD / EUR (fixed rates: 1 USD=32.5 TRY, 1 EUR=35.2 TRY)
+- Breakdown table with per-day + totals + grand total
+- **📊 Export CSV** for spreadsheet planning
+
+### 🧭 Route Optimizer — Modes, Times, Save/Load
+
+- **Travel mode:** 🚗 Car/Taxi (50 km/h) / 🚌 Dolmuş/Bus (35 km/h) / 🚶 Walk (5 km/h)
+- **Start / End** dropdowns (any place or auto)
+- Nearest-neighbor + 2-opt optimization
+- Per-leg: distance (km) + estimated minutes
+- Map: teal polyline + numbered markers, fitBounds
+- **💾 Save / 📂 Load** route to localStorage
+
+### 🎒 Packing Checklist — Auto-Generated
+
+- Based on your plan, season, and activities
+- Categories: Essentials, Clothing (summer/winter auto), Nature/Hiking, Ancient Sites, Water Activities, Tech, Optional
+- Checkbox UI, **📥 Export CSV**
+
+### 📱 Quick Actions
+
+- One-tap Google Maps links for Pamukkale, Hierapolis, Laodicea, Kaklık, Buldan, Teleferik
 
 ---
 
-## Design — Travertine to Night
+## Design — Bosphorus Nights
 
-- **Before (light travertine):** `bg #fdfcfa`, white cards — pleasant but washed out in sun.
-- **Now (Bosphorus Nights, v6):** `bg #070b1a` deep navy, cards **solid dark `#1e293b`** (not translucent white) + `border #334155`, **place cards now fully readable** (`#f8fafc` title 15px 800, `#e2e8f0` desc 13px 600, `#94a3b8` tip, gradient badges white text, `box-shadow` 0 6px 16px), filters `rgba(255,255,255,.06)` dark, hero stats white teal/brown, **per-place audio buttons** visible. **No flat white left (v5→v6 fix).**
-- **Typography:** Fraunces 700 for headings, Inter 500/600/700 for UI, 1.65 line-height.
-- **Map:** `0.9 saturate, 0.95 brightness` to match night.
+- **Background:** `#070b1a` deep navy with subtle radial gradients (teal + amber)
+- **Cards:** Solid dark `#1e293b` with `#334155` borders, `box-shadow: 0 6px 16px rgba(0,0,0,.28)`
+- **Typography:** Fraunces 700 for headings, Inter 500/600/700 for UI, 1.65 line-height
+- **Readability:** Place cards use `#f8fafc` titles (15px, 800), `#e2e8f0` descriptions (13px, 600), `#94a3b8` tips, gradient badges with white text
+- **Map:** `saturate(0.9) brightness(0.95)` to match night theme
+- **Accents:** Teal `#0e7490` (primary), Amber `#f59e0b` (warnings/tips), Green `#10b981` (success/budget), Purple `#8b5cf6` (ancient)
 
 ---
 
@@ -136,9 +157,9 @@ Most Denizli guides are scattered PDFs, hotel brochures, or online-only blogs th
 | Layer | Choice | Why |
 |-------|--------|-----|
 | Frontend | Vanilla HTML/CSS/JS, no build | Offline, single file per concern, fast |
-| Map | Leaflet 1.9.4 (BSD) + OSM (ODbL) | No key, cacheable |
-| Audio | `edge-tts` Python → MP3 (Emel/Jenny Neural) + `<audio>` + `SpeechSynthesis` for “Pamukkale nerede?” | Natural, not robotic, no MP3 copyright |
-| Storage | `localStorage` for journal/SOS/a11y (not for this guide, but pattern) | No backend, privacy-first |
+| Map | Leaflet 1.9.4 (BSD) + OSM (ODbL) | No key, cacheable, works offline after tile cache |
+| Audio | `edge-tts` Python → MP3 (Emel/Jenny Neural) + `<audio>` + `SpeechSynthesis` | Natural, not robotic, no MP3 copyright |
+| Storage | `localStorage` for saved routes, plans | No backend, privacy-first |
 | Fonts | Fraunces + Inter via Google Fonts (OFL) | Editorial + UI |
 | Icons | Emoji + CSS | Zero deps |
 
@@ -148,53 +169,16 @@ Most Denizli guides are scattered PDFs, hotel brochures, or online-only blogs th
 
 ```
 denizli-guide/
-├── index.html   # v8 cache bust, header DBB, audio guide top + per-place TR/EN players, Monument filter
+├── index.html   # v9 cache bust, header DBB, audio guide top + per-place TR/EN players, Plan tab v2
 ├── style.css    # Bosphorus Nights dark (070b1a), solid dark cards #1e293b — readable
-├── app.js       # 26 places (Ancient/Nature/City/Monument/Food), focusPlace() zoom-13 + buses + tips + per-card audio
+├── app.js       # 26 places, focusPlace zoom-13, smart planner, budget CSV, route modes, packing, share URL
 ├── audio/
 │   ├── pamukkale_tr.mp3 / pamukkale_en.mp3  # complete guide (341/297KB)
 │   ├── *_tr.mp3 / *_en.mp3 for all 26 ids   # per-place 1-2 sentences (24-61KB ×52)
 │   ├── generate.py / generate_all.py / generate_v7.py  # edge-tts reproducible (Emel/Jenny Neural)
 │   └── *_tr.txt / *_en.txt                  # original scripts
-└── README.md    # this file (v8)
+└── README.md    # this file (v9)
 ```
-
----
-
-## 📄 Actual `index.html` (Live File)
-
-This is the **actual `index.html`** deployed to Pages (v8, `style.css?v=8` / `app.js?v=8`). No separate build — what you see on GitHub is what runs live.
-
-- **View on GitHub:** [https://github.com/Flynntaggart26/denizli-guide/blob/main/index.html](https://github.com/Flynntaggart26/denizli-guide/blob/main/index.html)
-- **Raw:** `https://raw.githubusercontent.com/Flynntaggart26/denizli-guide/main/index.html`
-- **Live:** [https://flynntaggart26.github.io/denizli-guide/](https://flynntaggart26.github.io/denizli-guide/)
-
-<details><summary>Click to expand — first 60 lines of actual <code>index.html</code></summary>
-
-```html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Discover Denizli — Complete Guide</title>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700&family=Inter:wght@500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-<link rel="stylesheet" href="style.css?v=8">
-</head>
-<body>
-<header class="header">
-  <div class="head-inner">
-    <div class="logo"><div class="mark">DZ</div><div><h1>Discover Denizli</h1><p>Official Companion • Offline • EN/TR</p></div></div>
-    <div class="head-actions">
-      <a href="https://www.denizli.bel.tr" target="_blank" class="btn" style="background:#0e7490;color:white">🏛 DBB Official →</a>
-...
-</html>
-```
-
-Full file is exactly as in repo — vanilla, no build.
-
-</details>
 
 ---
 
@@ -218,7 +202,7 @@ Live: **https://flynntaggart26.github.io/denizli-guide/** (GitHub Pages, `main` 
 - **Audio:** Generated via `edge-tts` (Microsoft Neural) from **original script** — no Wikipedia, no music, no stock audio. Files are yours to keep.
 - **Descriptions:** Original, 1–2 sentences, no copy.
 - **Climate:** MGM 1991–2020 normals, public domain, original bars.
-- **Privacy:** No tracking, no backend. Geolocation only for Nearest, never sent. Audio plays locally.
+- **Privacy:** No tracking, no backend. Geolocation only for Nearest, never sent. Audio plays locally. Plans/routes saved to your browser only.
 - **Official source:** Always verify hours/prices at [https://www.denizli.bel.tr](https://www.denizli.bel.tr) — linked in header, map footer, Essentials.
 
 ---
@@ -227,9 +211,30 @@ Live: **https://flynntaggart26.github.io/denizli-guide/** (GitHub Pages, `main` 
 
 - [x] v1.0 — 15 places + map + food + history + plan
 - [x] v1.1 — Pamukkale audio (neural) + dark readable + DBB links
-- [x] v7 — 26 places + Monument category (statues, memorials), empty-list bug fix, README sync
-- [x] v8 — per-place TR/EN audio for all 26, focusPlace zoom-13, bus numbers + mini tips on cards and detail
-- [ ] v1.2 — PWA + offline tile cache + AR travertine overlay
+- [x] v7 — 26 places + Monument category, empty-list bug fix, README sync
+- [x] v8 — per-place TR/EN audio for all 26, focusPlace zoom-13, bus numbers + mini tips
+- [x] v9 — Smart itinerary planner, budget breakdown+CSV, route optimizer with modes/time/save, packing list, shareable URLs
+- [ ] v1.2 — PWA + offline tile cache + AR travertine overlay + weather widget + multi-language UI
+
+---
+
+## Contributing
+
+Contributions welcome! Especially:
+
+- New place data (coords, buses, tips, activities)
+- Audio script improvements (TR/EN)
+- Budget rate updates
+- Translations (DE, FR, RU, AR…)
+- Bug fixes / UI polish
+
+1. Fork the repo
+2. Create a branch: `git checkout -b feat/your-idea`
+3. Edit `index.html`, `app.js`, or add audio scripts
+4. Test by opening `index.html` locally
+5. Commit and open a Pull Request
+
+Small, focused PRs are best.
 
 ---
 
@@ -239,5 +244,4 @@ Live: **https://flynntaggart26.github.io/denizli-guide/** (GitHub Pages, `main` 
 
 Built with ❤️ in Denizli — for tourists and for locals who want to show their city.
 
-*Last update: September 2026 — v8, 26 places + monuments, zoom + buses + tips + full TR/EN audio.*
-
+*Last update: September 2026 — v9, smart planner, budget CSV, route modes, packing, shareable URLs, full TR/EN audio for all 26 places.*
