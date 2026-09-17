@@ -232,49 +232,222 @@ function updateAllergyCard(){
   card.innerHTML=`<b style="color:#fde68a">⚠️ Alerjim var:</b> ${allAllergens.join(', ')}<br><span style="font-size:12px">Lütfen yemeğimde <b>${allAllergens.join(', ')}</b> olmasın. Teşekkürler!</span><br><span style="font-size:11px;color:#9aa0c2">I have allergy to ${allAllergens.join(', ')} — please no ${allAllergens.join(', ')}.</span>`;
 }
 let lastPlan=null;
-function generatePlan(){
-  const days=parseInt(document.getElementById('pDays').value);
-  const picks=days===1? ['pam','hier'] : days===2? ['pam','hier','lao','kak'] : ['pam','hier','lao','kak','bul','cam'];
-  const plan=picks.map(id=> places.find(p=>p.id===id));
+let lastBudget=null;
+let savedRoute=null;
+const RATES={TRY:1, USD:32.5, EUR:35.2};
+const PLACE_DURATION={Ancient:120, Nature:90, City:60, Monument:30, Food:90};
+const MODE_SPEED={car:50, dolmus:35, walk:5};
+
+function renderPlanFocus(){
+  const el=document.getElementById('pFocus'); if(!el) return;
+  const cats=[...new Set(places.map(p=>p.cat))];
+  el.innerHTML='';
+  cats.forEach(c=>{
+    const b=document.createElement('button');
+    b.textContent=c; b.style.cssText='padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:#9aa0c2;font-weight:700;font-size:12px;cursor:pointer';
+    b.onclick=()=>{ b.classList.toggle('active'); if(b.classList.contains('active')){ b.style.background='linear-gradient(135deg,#0e7490,#06b6d4)'; b.style.color='white'; b.style.borderColor='transparent'; } else { b.style.background='rgba(255,255,255,.06)'; b.style.color='#9aa0c2'; b.style.borderColor='rgba(255,255,255,.12)'; } };
+    el.appendChild(b);
+  });
+}
+function renderRoutePicks(){
+  const el=document.getElementById('routePicks'); if(!el) return;
+  const startEl=document.getElementById('rStart'), endEl=document.getElementById('rEnd');
+  el.innerHTML='';
+  if(startEl){ startEl.innerHTML='<option value="">Auto (nearest)</option>'; }
+  if(endEl){ endEl.innerHTML='<option value="">Same as start</option>'; }
+  places.forEach(p=>{
+    const b=document.createElement('button');
+    b.textContent=p.name; b.dataset.pid=p.id;
+    b.style.cssText='padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.05);color:#f1f3ff;font-size:12px;cursor:pointer;transition:.15s';
+    b.onclick=()=>{ b.classList.toggle('active'); if(b.classList.contains('active')){ b.style.background='linear-gradient(135deg,#0e7490,#06b6d4)'; b.style.borderColor='transparent'; b.style.color='white'; } else { b.style.background='rgba(255,255,255,.05)'; b.style.borderColor='rgba(255,255,255,.10)'; b.style.color='#f1f3ff'; } };
+    el.appendChild(b);
+    if(startEl){ const o=document.createElement('option'); o.value=p.id; o.textContent=p.name; startEl.appendChild(o); }
+    if(endEl){ const o=document.createElement('option'); o.value=p.id; o.textContent=p.name; endEl.appendChild(o); }
+  });
+}
+function generateSmartPlan(){
+  const days=parseInt(document.getElementById('pDays').value)||2;
+  const pace=document.getElementById('pPace').value;
+  const focus=[...document.querySelectorAll('#pFocus .active')].map(b=>b.textContent);
+  const start=document.getElementById('pStart').value;
+  const perDay={relaxed:2.5, balanced:3.5, packed:5}[pace];
+  const totalSlots=Math.round(days*perDay);
+  let pool=places.filter(p=> focus.length===0 || focus.includes(p.cat));
+  if(!pool.length) pool=places;
+  pool=[...pool].sort(()=>Math.random()-0.5);
+  let plan=[];
+  if(start && start!=='hotel'){
+    const s=places.find(p=>p.id===start);
+    if(s) plan.push(s);
+  }
+  for(const p of pool){
+    if(plan.length>=totalSlots) break;
+    if(!plan.find(x=>x.id===p.id)) plan.push(p);
+  }
   lastPlan=plan;
-  const total=plan.length* 600;
-  document.getElementById('planOut').innerHTML=`<div style="padding:12px;background:#f0fdfa;border:1px solid #a7f3d0;border-radius:12px"><b>${days}-day Denizli • ~${total} TRY/p (no hotel)</b><ol style="margin:8px 0 0 18px;font-size:13px">${plan.map((p,i)=>`<li><b>${p.name}</b> — ${p.desc}</li>`).join('')}</ol></div>`;
+  renderPlanTimeline(plan, days);
+}
+function renderPlanTimeline(plan, days){
+  const el=document.getElementById('planOut'); if(!el) return;
+  const perDay=Math.ceil(plan.length/days);
+  let html='';
+  let idx=0;
+  for(let d=1; d<=days; d++){
+    const dayPlan=plan.slice(idx, idx+perDay);
+    idx+=perDay;
+    if(!dayPlan.length) break;
+    let dayKm=0, dayMin=0;
+    for(let i=0;i<dayPlan.length-1;i++){ const km=haversine(dayPlan[i].lat,dayPlan[i].lon,dayPlan[i+1].lat,dayPlan[i+1].lon); dayKm+=km; dayMin+=km/35*60; }
+    html+=`<div style="margin-bottom:16px;padding:12px;background:rgba(14,116,144,.10);border:1px solid rgba(14,116,144,.25);border-radius:12px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <b style="color:#5eead4;font-size:14px">Day ${d}</b>
+        <span style="font-size:11px;color:#94a3b8">${dayPlan.length} stops • ~${dayKm.toFixed(0)}km • ~${Math.round(dayMin)}min travel</span>
+      </div>
+      <ol style="margin:0 0 0 18px;font-size:13px;color:#e2e8f0;line-height:1.8">${dayPlan.map((p,i)=>`<li><b>${p.name}</b> <span style="color:#94a3b8">(${p.cat}, ~${PLACE_DURATION[p.cat]||60}min)</span> — ${p.desc}</li>`).join('')}</ol>
+    </div>`;
+  }
+  if(!html) html='<div style="padding:12px;color:#94a3b8">No plan generated. Adjust filters or add more days.</div>';
+  el.innerHTML=html;
+}
+function clearPlan(){ lastPlan=null; document.getElementById('planOut').innerHTML=''; }
+function randomizePlan(){ document.getElementById('pDays').value=Math.floor(Math.random()*3)+2; document.getElementById('pPace').value=['relaxed','balanced','packed'][Math.floor(Math.random()*3)]; generateSmartPlan(); }
+function copyPlanText(){
+  if(!lastPlan||!lastPlan.length){ alert('Generate a plan first'); return; }
+  const days=parseInt(document.getElementById('pDays').value)||2;
+  const perDay=Math.ceil(lastPlan.length/days);
+  let txt=`Denizli ${days}-Day Itinerary\n${'='.repeat(30)}\n`;
+  let idx=0;
+  for(let d=1; d<=days; d++){
+    const dayPlan=lastPlan.slice(idx, idx+perDay); idx+=perDay;
+    if(!dayPlan.length) break;
+    txt+=`\nDay ${d}:\n`;
+    dayPlan.forEach((p,i)=> txt+=`  ${i+1}. ${p.name} (${p.cat}) — ${p.desc}\n`);
+  }
+  navigator.clipboard.writeText(txt).then(()=>alert('Copied to clipboard!'));
+}
+function sharePlanUrl(){
+  if(!lastPlan||!lastPlan.length){ alert('Generate a plan first'); return; }
+  const params=new URLSearchParams();
+  params.set('plan', lastPlan.map(p=>p.id).join(','));
+  params.set('days', document.getElementById('pDays').value);
+  params.set('pace', document.getElementById('pPace').value);
+  const focus=[...document.querySelectorAll('#pFocus .active')].map(b=>b.textContent);
+  if(focus.length) params.set('focus', focus.join(','));
+  const url=`${location.origin}${location.pathname}?${params.toString()}`;
+  navigator.clipboard.writeText(url).then(()=>alert('Shareable link copied!'));
 }
 function calcBudget(){
   const trav=parseInt(document.getElementById('bTrav').value)||1;
   const days=parseInt(document.getElementById('bDays').value)||1;
   const tier=document.getElementById('bTier').value;
-  const avg={budget:600, mid:1100, lux:1900}[tier];
-  document.getElementById('budgetOut').innerHTML=`<b>~${avg*days*trav} TRY</b> for ${trav} × ${days} days (${tier})`;
+  const currency=document.getElementById('bCurrency').value;
+  const rates=RATES[currency]||1;
+  const sym=currency==='TRY'?'₺':currency==='USD'?'$':'€';
+  const base={budget:{stay:400,food:200,transport:80,tickets:150}, mid:{stay:800,food:350,transport:150,tickets:250}, lux:{stay:1500,food:600,transport:300,tickets:400}}[tier];
+  const breakdown=Object.entries(base).map(([k,v])=> ({cat:k, perDay:v, total:v*days*trav, totalC:(v*days*trav/rates).toFixed(2)}));
+  const grand=breakdown.reduce((s,b)=>s+b.total,0);
+  lastBudget={trav,days,tier,currency,breakdown,grand};
+  const rows=breakdown.map(b=>`<tr style="border-bottom:1px solid rgba(255,255,255,.08)"><td style="padding:8px;color:#fde68a">${b.cat}</td><td style="padding:8px;text-align:right;color:#e2e8f0">${sym}${b.totalC}/day</td><td style="padding:8px;text-align:right;color:#5eead4;font-weight:700">${sym}${b.totalC}</td></tr>`).join('');
+  document.getElementById('budgetOut').innerHTML=`<div style="padding:12px;background:rgba(16,185,129,.10);border:1px solid rgba(16,185,129,.25);border-radius:12px">
+    <div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9aa0c2;font-weight:800;margin-bottom:8px">Breakdown (${sym}${currency})</div>
+    <table style="width:100%;border-collapse:collapse;font-size:13px"><thead><tr style="color:#94a3b8;font-weight:700"><td style="padding:8px">Category</td><td style="padding:8px;text-align:right">Per Day</td><td style="padding:8px;text-align:right">Total</td></tr></thead><tbody>${rows}</tbody></table>
+    <div style="display:flex;justify-content:space-between;margin-top:10px;padding-top:10px;border-top:1px solid rgba(16,185,129,.25);font-weight:800;font-size:15px"><span>Grand Total</span><span style="color:#5eead4">${sym}${(grand/rates).toFixed(2)}</span></div>
+  </div>`;
 }
-function renderRoutePicks(){
-  const el=document.getElementById('routePicks'); if(!el) return;
-  el.innerHTML=''; places.forEach(p=>{
-    const b=document.createElement('button');
-    b.textContent=p.name; b.style.cssText='padding:6px 10px;border-radius:999px;border:1px solid #f0e6d9;background:white;font-size:12px;cursor:pointer';
-    b.onclick=()=> b.classList.toggle('active');
-    el.appendChild(b);
-  });
+function exportBudgetCSV(){
+  if(!lastBudget){ alert('Calculate budget first'); return; }
+  const {trav,days,tier,currency,breakdown,grand}=lastBudget;
+  const sym=currency==='TRY'?'₺':currency==='USD'?'$':'€';
+  let csv='Category,Per Day ('+sym+'),Total ('+sym+')\n';
+  breakdown.forEach(b=> csv+=`${b.cat},${b.totalC},${b.totalC}\n`);
+  csv+=`Grand Total,,${(grand/RATES[currency]).toFixed(2)}\n`;
+  const blob=new Blob([csv],{type:'text/csv'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=`denizli-budget-${tier}-${days}d.csv`; a.click(); URL.revokeObjectURL(url);
 }
 function haversine(a,b,c,d){const R=6371, dLat=(c-a)*Math.PI/180, dLon=(d-b)*Math.PI/180, e=Math.sin(dLat/2)**2+Math.cos(a*Math.PI/180)*Math.cos(c*Math.PI/180)*Math.sin(dLon/2)**2; return R*2*Math.asin(Math.sqrt(e));}
+function travelTime(km, mode){ return Math.round(km/MODE_SPEED[mode]*60); }
 function optimizeRoute(){
-  const sel=[...document.querySelectorAll('#routePicks .active')].map(b=>b.textContent);
-  const pts=sel.map(n=> places.find(p=>p.name===n)).filter(Boolean);
+  const sel=[...document.querySelectorAll('#routePicks .active')].map(b=>b.dataset.pid);
+  const pts=sel.map(id=> places.find(p=>p.id===id)).filter(Boolean);
   if(pts.length<2){ alert('Pick 2+ places'); return; }
-  let route=[pts[0]], rest=pts.slice(1);
-  while(rest.length){ let best=0,d0=Infinity; rest.forEach((p,i)=>{const d=haversine(route[route.length-1].lat,route[route.length-1].lon,p.lat,p.lon); if(d<d0){d0=d;best=i;}}); route.push(rest.splice(best,1)[0]);}
-  const total=route.slice(0,-1).reduce((s,_,i)=> s+haversine(route[i].lat,route[i].lon,route[i+1].lat,route[i+1].lon),0);
-  document.getElementById('routeOut').innerHTML=`<div style="padding:10px;background:#fffbeb;border:1px solid #fde68a;border-radius:10px">${route.map((p,i)=> `${i+1}. ${p.name}`).join(' → ')}<br><b>${total.toFixed(0)} km</b></div>`;
+  const mode=document.getElementById('rMode').value;
+  const startId=document.getElementById('rStart').value;
+  const endId=document.getElementById('rEnd').value;
+  let route=[], rest=[...pts];
+  if(startId){ const s=places.find(p=>p.id===startId); if(s){ route.push(s); rest=rest.filter(p=>p.id!==startId); } }
+  else { route.push(rest.splice(0,1)[0]); }
+  while(rest.length){ let best=0,d0=Infinity; rest.forEach((p,i)=>{const d=haversine(route[route.length-1].lat,route[route.length-1].lon,p.lat,p.lon); if(d<d0){d0=d;best=i;}}); route.push(rest.splice(best,1)[0]); }
+  if(endId && endId!==route[route.length-1].id){ const e=places.find(p=>p.id===endId); if(e && !route.find(x=>x.id===endId)) route.push(e); }
+  const legs=route.slice(0,-1).map((p,i)=>({from:p, to:route[i+1], km:haversine(p.lat,p.lon,route[i+1].lat,route[i+1].lon)}));
+  const totalKm=legs.reduce((s,l)=>s+l.km,0);
+  const totalMin=legs.reduce((s,l)=>s+travelTime(l.km,mode),0);
+  savedRoute={route, legs, mode, totalKm, totalMin};
+  let html=`<div style="padding:12px;background:rgba(245,158,11,.10);border:1px solid rgba(245,158,11,.25);border-radius:12px">
+    <div style="display:flex;justify-content:space-between;margin-bottom:10px"><b style="color:#fde68a">Optimized Route (${mode})</b><span style="color:#94a3b8">${totalKm.toFixed(1)} km • ~${Math.floor(totalMin/60)}h${totalMin%60}m</span></div>
+    <ol style="margin:0 0 0 18px;font-size:13px;color:#e2e8f0;line-height:1.9">${legs.map((l,i)=>`<li>${i+1}. <b>${l.from.name}</b> → <b>${l.to.name}</b> <span style="color:#94a3b8">(${l.km.toFixed(1)}km, ~${travelTime(l.km,mode)}min)</span></li>`).join('')}${legs.length?`<li>${legs.length+1}. <b>${route[route.length-1].name}</b> (end)</li>`:''}</ol>
+    <div style="margin-top:10px;padding:8px;background:rgba(255,255,255,.04);border-radius:8px;font-size:11px;color:#9aa0c2">Times are estimates. Dolmuş waits ~15min. Check <a href="https://www.denizli.bel.tr/ulasim" style="color:#5eead4">denizli.bel.tr</a> for schedules.</div>
+  </div>`;
+  document.getElementById('routeOut').innerHTML=html;
+  document.getElementById('routeStats').textContent=`${route.length} stops • ${totalKm.toFixed(1)}km • ~${totalMin}min`;
   if(window.routeLine) map.removeLayer(window.routeLine);
-  window.routeLine=L.polyline(route.map(p=>[p.lat,p.lon]),{color:'#0e7490'}).addTo(map);
+  window.routeLine=L.polyline(route.map(p=>[p.lat,p.lon]),{color:'#0e7490', weight:3, opacity:0.8, dashArray:'8,6'}).addTo(map);
+  legs.forEach((l,i)=>{ L.marker([l.to.lat,l.to.lon]).addTo(map).bindTooltip(`${i+1}. ${l.to.name}`); });
   map.fitBounds(window.routeLine.getBounds(),{padding:[20,20]});
 }
-function clearRoute(){ document.querySelectorAll('#routePicks .active').forEach(b=>b.classList.remove('active')); document.getElementById('routeOut').innerHTML=''; if(window.routeLine) map.removeLayer(window.routeLine); }
+function clearRoute(){ document.querySelectorAll('#routePicks .active').forEach(b=>b.classList.remove('active')); document.getElementById('routeOut').innerHTML=''; document.getElementById('routeStats').textContent=''; if(window.routeLine){ map.removeLayer(window.routeLine); window.routeLine=null; } }
+function saveRoute(){ if(!savedRoute){ alert('Optimize a route first'); return; } localStorage.setItem('denizli-saved-route', JSON.stringify(savedRoute)); alert('Route saved to browser storage'); }
+function loadRoute(){ const data=localStorage.getItem('denizli-saved-route'); if(!data){ alert('No saved route found'); return; } savedRoute=JSON.parse(data); const ids=savedRoute.route.map(p=>p.id); document.querySelectorAll('#routePicks button').forEach(b=>{ if(ids.includes(b.dataset.pid)) b.classList.add('active'); }); optimizeRoute(); }
 function exportPlanICS(){
-  if(!lastPlan){alert('Generate plan first');return;}
-  let ics='BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Denizli//EN\n';
-  lastPlan.forEach((p,i)=>{const d=new Date(); d.setDate(d.getDate()+i); const y=d.toISOString().slice(0,10).replace(/-/g,''); ics+=`BEGIN:VEVENT\nDTSTART:${y}T080000Z\nSUMMARY:${p.name}\nDESCRIPTION:${p.desc}\nEND:VEVENT\n`;});
-  ics+='END:VCALENDAR'; const blob=new Blob([ics],{type:'text/calendar'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='denizli.ics'; a.click(); URL.revokeObjectURL(url);
+  if(!lastPlan||!lastPlan.length){ alert('Generate a plan first'); return; }
+  const days=parseInt(document.getElementById('pDays').value)||2;
+  const perDay=Math.ceil(lastPlan.length/days);
+  let ics='BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Denizli Guide//EN\n';
+  let idx=0;
+  for(let d=1; d<=days; d++){
+    const dayPlan=lastPlan.slice(idx, idx+perDay); idx+=perDay;
+    if(!dayPlan.length) break;
+    dayPlan.forEach((p,i)=>{
+      const date=new Date(); date.setDate(date.getDate()+d-1);
+      const y=date.toISOString().slice(0,10).replace(/-/g,'');
+      ics+=`BEGIN:VEVENT\nDTSTART:${y}T080000Z\nSUMMARY:Day ${d}: ${p.name}\nDESCRIPTION:${p.desc}\nEND:VEVENT\n`;
+    });
+  }
+  ics+='END:VCALENDAR';
+  const blob=new Blob([ics],{type:'text/calendar'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='denizli-itinerary.ics'; a.click(); URL.revokeObjectURL(url);
+}
+function generatePackingList(){
+  const season=new Date().getMonth(); // 0-11
+  const isSummer=season>=5 && season<=8;
+  const hasNature=lastPlan?.some(p=>p.cat==='Nature') || false;
+  const hasAncient=lastPlan?.some(p=>p.cat==='Ancient') || false;
+  const hasWater=lastPlan?.some(p=>['pam','kar','cleo','civ','kak'].includes(p.id)) || false;
+  const items={
+    essentials:['Passport/ID','Phone + charger','Power bank','Travel insurance','Cash (TRY) + card','Medications'],
+    clothing: isSummer? ['Light shirts/shorts','Sun hat','Sunglasses','Swimwear','Sandals','Light jacket (evenings)'] : ['Warm layers','Waterproof jacket','Closed shoes','Long pants','Scarf/gloves'],
+    nature: hasNature? ['Hiking shoes','Daypack (20L)','Water bottle','Snacks','Sunscreen','Basic first aid'] : [],
+    ancient: hasAncient? ['Comfortable walking shoes','Hat','Sunscreen','Water','Camera','Notebook'] : [],
+    water: hasWater? ['Swimwear','Quick-dry towel','Water shoes','Waterproof bag','Change of clothes'] : [],
+    tech:['Phone','Camera','Portable charger','Adapter (Type C/F)'],
+    optional:['Turkish phrasebook','Binoculars','Journal','Playing cards','Reusable bag']
+  };
+  let html='';
+  for(const [cat, list] of Object.entries(items)){
+    if(!list.length) continue;
+    const label={'essentials':'⚡ Essentials','clothing':isSummer?'☀️ Summer Clothing':'❄️ Winter Clothing','nature':'🌿 Nature/Hiking','ancient':'🏛 Ancient Sites','water':'💧 Water Activities','tech':'🔌 Tech','optional':'✨ Optional'}[cat];
+    html+=`<div style="margin-bottom:12px"><div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9aa0c2;font-weight:800;margin-bottom:6px">${label}</div><div style="display:flex;flex-wrap:wrap;gap:6px">${list.map(x=>`<label style="display:flex;align-items:center;gap:6px;padding:6px 10px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:8px;font-size:12px;cursor:pointer"><input type="checkbox" style="accent-color:#0e7490"> ${x}</label>`).join('')}</div></div>`;
+  }
+  document.getElementById('packingOut').innerHTML=html||'<div style="color:#94a3b8;padding:12px">Generate a plan first to get a tailored list</div>';
+}
+function exportPackingCSV(){
+  const checks=[...document.querySelectorAll('#packingOut input[type=checkbox]:checked')];
+  if(!checks.length){ alert('Generate checklist and tick items first'); return; }
+  let csv='Category,Item\n';
+  checks.forEach(c=>{ const label=c.closest('div').textContent.trim(); csv+=`Packing,${label}\n`; });
+  const blob=new Blob([csv],{type:'text/csv'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='denizli-packing.csv'; a.click(); URL.revokeObjectURL(url);
+}
+function openMaps(id){
+  const p=places.find(x=>x.id===id); if(!p) return;
+  const url=`https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lon}`;
+  window.open(url,'_blank');
 }
 function renderTimeline(){
   const el=document.getElementById('timeline'); if(!el) return;
@@ -315,7 +488,25 @@ function switchAudio(lang){
 document.addEventListener('DOMContentLoaded',()=>{
   // audio default
   setTimeout(()=> switchAudio('tr'), 300);
-  initMap(); renderPlaces(); renderFood(); renderTimeline(); renderClimate(); renderRoutePicks();
+  initMap(); renderPlaces(); renderFood(); renderTimeline(); renderClimate(); renderRoutePicks(); renderPlanFocus();
+  // load plan from URL if present
+  const urlParams=new URLSearchParams(window.location.search);
+  if(urlParams.has('plan')){
+    const ids=urlParams.get('plan').split(',');
+    const days=parseInt(urlParams.get('days'))||2;
+    const pace=urlParams.get('pace')||'balanced';
+    document.getElementById('pDays').value=days;
+    document.getElementById('pPace').value=pace;
+    if(urlParams.has('focus')){
+      const focus=urlParams.get('focus').split(',');
+      setTimeout(()=>{
+        document.querySelectorAll('#pFocus button').forEach(b=>{ if(focus.includes(b.textContent)) b.classList.add('active'); });
+        generateSmartPlan();
+      }, 200);
+    } else {
+      generateSmartPlan();
+    }
+  }
   ['history','nature','beach','food','balloon'].forEach(i=>{
     const el=document.getElementById('pInterests');
     if(el){
